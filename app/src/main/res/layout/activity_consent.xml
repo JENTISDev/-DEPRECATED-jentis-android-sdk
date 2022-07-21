@@ -11,64 +11,86 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:layout_marginTop="40dp"
-        android:text="Main Screen"
+        android:text="Consent Screen"
         android:textSize="25dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/configButton"
+        app:layout_constraintBottom_toTopOf="@+id/xandrSwitch"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.528"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.33" />
 
-    <Button
-        android:id="@+id/configButton"
+    <Switch
+        android:id="@+id/xandrSwitch"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="55dp"
         android:layout_marginStart="22dp"
         android:layout_marginTop="152dp"
         android:layout_marginEnd="22dp"
-        android:text="Config Screen"
+        android:text="xandr"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/debugButton"
+    <Switch
+        android:id="@+id/googleSwitch"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginStart="22dp"
         android:layout_marginEnd="22dp"
-        android:text="Debug Screen"
-
+        android:text="googleanalytics"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/configButton" />
+        app:layout_constraintTop_toBottomOf="@id/xandrSwitch" />
 
-    <Button
-        android:id="@+id/consentButton"
+    <Switch
+        android:id="@+id/facebookSwitch"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginStart="22dp"
         android:layout_marginEnd="22dp"
-        android:text="Consent Screen"
+        android:text="facebook"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/debugButton" />
+        app:layout_constraintTop_toBottomOf="@id/googleSwitch" />
 
-    <Button
-        android:id="@+id/trackingButton"
+    <Switch
+        android:id="@+id/easymarketingSwitch"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginStart="22dp"
         android:layout_marginEnd="22dp"
-        android:text="Tracking Screen"
+        android:text="easymarketing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/consentButton" />
+        app:layout_constraintTop_toBottomOf="@id/facebookSwitch" />
+
+    <Switch
+        android:id="@+id/criterioSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:text="criterioSwitch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/easymarketingSwitch" />
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="50dp"
+        android:text="Submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

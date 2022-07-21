@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">My Application</string>
+
+    <string name="jentis_track_domain">https://kndmjh.allaboutapps.jtm-demo.com/</string>
+    <string name="jentis_track_id">allaboutapps</string>
+    <string name="jentis_environment">live</string>
+
+    <string name="jentis_debug_id">62d7c2c3655e4</string>
+    <string name="jentis_debug_version">2</string>
 </resources>

@@ -12,63 +12,61 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
-        android:layout_marginTop="40dp"
-        android:text="Main Screen"
+        android:text="Debug Screen"
         android:textSize="25dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/configButton"
+        app:layout_constraintBottom_toTopOf="@+id/trackDomainET"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.528"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/configButton"
+    <Switch
+        android:id="@+id/enabledSwitch"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="55dp"
         android:layout_marginStart="22dp"
         android:layout_marginTop="152dp"
         android:layout_marginEnd="22dp"
-        android:text="Config Screen"
+        android:text="Enabled"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/debugButton"
+    <EditText
+        android:id="@+id/debugIdET"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginStart="22dp"
         android:layout_marginEnd="22dp"
-        android:text="Debug Screen"
-
+        android:text="@string/jentis_debug_id"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/configButton" />
+        app:layout_constraintTop_toBottomOf="@id/enabledSwitch" />
 
-    <Button
-        android:id="@+id/consentButton"
+    <EditText
+        android:id="@+id/debugVersionET"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginStart="22dp"
         android:layout_marginEnd="22dp"
-        android:text="Consent Screen"
+        android:text="@string/jentis_debug_version"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/debugButton" />
+        app:layout_constraintTop_toBottomOf="@id/debugIdET" />
 
     <Button
-        android:id="@+id/trackingButton"
-        android:layout_width="match_parent"
+        android:id="@+id/submitButton"
+        android:layout_width="349dp"
         android:layout_height="55dp"
         android:layout_marginStart="22dp"
         android:layout_marginEnd="22dp"
-        android:text="Tracking Screen"
+        android:layout_marginBottom="50dp"
+        android:text="Submit"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/consentButton" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
