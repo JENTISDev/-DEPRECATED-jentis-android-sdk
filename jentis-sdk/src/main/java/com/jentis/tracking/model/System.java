@@ -1,36 +1,40 @@
 package com.jentis.tracking.model;
 
+import androidx.annotation.RestrictTo;
+
+import com.google.gson.JsonObject;
+import com.jentis.tracking.Utils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class System {
     String environment, navigatorUserAgent, href;
-    HashMap<String, Boolean> consent;
+    Map<String, Boolean> consent;
 
     public System() {}
 
-    public System(String environment, String navigatorUserAgent, String href, HashMap<String, Boolean> consent) {
+    public System(String environment, String navigatorUserAgent, String href, Map<String, Boolean> consent) {
         setEnvironment(environment);
         setNavigatorUserAgent(navigatorUserAgent);
         setHref(href);
         setConsent(consent);
     }
 
-    public String toJSON() {
-        JSONObject jsonObject= new JSONObject();
-        try {
-            jsonObject.put("environment", getEnvironment());
-            jsonObject.put("navigator-userAgent", getNavigatorUserAgent());
-            jsonObject.put("href", getHref());
-            jsonObject.put("consent", getConsent());
-
-            return jsonObject.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return "";
+    public JsonObject toJSON() {
+        JsonObject jsonObject= new JsonObject();
+        jsonObject.addProperty("environment", getEnvironment());
+        jsonObject.addProperty("navigator-userAgent", getNavigatorUserAgent());
+        jsonObject.addProperty("href", getHref());
+        if(getConsent() != null){
+            jsonObject.add("consent", Utils.hashMapToJsonObjectBoolean(getConsent()));
         }
+
+        return jsonObject;
     }
 
     public String getEnvironment() {
@@ -57,11 +61,11 @@ public class System {
         this.href = href;
     }
 
-    public HashMap<String, Boolean> getConsent() {
+    public Map<String, Boolean> getConsent() {
         return consent;
     }
 
-    public void setConsent(HashMap<String, Boolean> consent) {
+    public void setConsent(Map<String, Boolean> consent) {
         this.consent = consent;
     }
 }

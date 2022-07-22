@@ -1,5 +1,8 @@
 package com.jentis.tracking.model.enums;
 
+import androidx.annotation.RestrictTo;
+
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public enum TrackEnum {
     CONSENT("consent", 0),
     PAGEVIEW("pageview", 1),

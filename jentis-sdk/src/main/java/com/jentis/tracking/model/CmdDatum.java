@@ -1,8 +1,11 @@
 package com.jentis.tracking.model;
 
+import androidx.annotation.RestrictTo;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class CmdDatum {
     String name, value = null;
     Integer exdays = 0;

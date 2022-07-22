@@ -1,5 +1,7 @@
 package com.jentis.tracking.model;
 
+import android.content.Context;
+
 import com.jentis.tracking.model.enums.Environment;
 
 import org.json.JSONException;
@@ -14,9 +16,9 @@ public class TrackConfig {
     public String trackID = null;
 
     /// The environment to track in (stage | live)
-    public Environment environment = null;
+    public String environment = null;
 
-    public TrackConfig(String trackDomain, String trackID, Environment environment) {
+    public TrackConfig(String trackDomain, String trackID, String environment) {
         this.trackDomain = trackDomain;
         this.trackID = trackID;
         this.environment = environment;

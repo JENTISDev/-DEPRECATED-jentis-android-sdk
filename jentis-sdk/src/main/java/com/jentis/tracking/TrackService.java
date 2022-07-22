@@ -1,7 +1,11 @@
 package com.jentis.tracking;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.jentis.tracking.model.Client;
 import com.jentis.tracking.model.DebugInformation;
 import com.jentis.tracking.model.Device;
@@ -11,7 +15,11 @@ import com.jentis.tracking.model.JentisLogger;
 import com.jentis.tracking.model.Parent;
 import com.jentis.tracking.model.TrackConfig;
 import com.jentis.tracking.model.Tracking;
+import com.jentis.tracking.model.TrackingDataDatum;
+import com.jentis.tracking.model.enums.DocumentType;
 import com.jentis.tracking.model.interfaces.ResultHandler;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,33 +51,33 @@ public class TrackService {
     private static final JentisLogger log = JentisLogger.getLogger("TrackService");
 
 
-//    private Data[] storedTrackings = []
+    private ArrayList<JsonObject> storedTrackings = new ArrayList<JsonObject>();
 
     private void init() {
-        // Load userId from UserDefaults
-        // Generate userId if it does not exist
         String userId = UserSettings.getInstance(context).getUserId();
         if(userId != null) {
             this.userId = userId;
         } else {
-            userId = Utils.generateRandomUUID();
-            UserSettings.getInstance(context).setUserId(userId);
+            this.userId = Utils.generateRandomUUID();
+            UserSettings.getInstance(context).setUserId(this.userId);
         }
+        JentisLogger.disableLogging(true);
         this.sessionId = Utils.generateRandomUUID();
         this.sessionCreatedAt = new Date();
     }
 
     /**
      * Initializes the Jentis Tracking in the SDK
-     * Parameter config: Contains the Configuration to initialize the SDK
+     * @param context: application context
+     * @param config: Contains the Configuration to initialize the SDK
      */
-    public void initTracking(TrackConfig config) {
-        String consent = UserSettings.getInstance(context).getUserId();
+    public void initTracking(Context context, TrackConfig config) {
+        this.context = context;
 
         if (UserSettings.getInstance(context).getConsents() != null) {
             this.consents = UserSettings.getInstance(context).getConsents();
         }
-
+        init();
         this.config = config;
         Api.getInstance().setup(config.trackDomain);
     }
@@ -110,7 +118,7 @@ public class TrackService {
      * Parameter consents: A list of the new Consents with true/false
      * Parameter completion: Contains the information whether the request was successful or not
      */
-    public void setConsents(HashMap<String, Boolean> consents, ResultHandler<Device> handler) {
+    public void setConsents(HashMap<String, Boolean> consents, ResultHandler<Object> handler) {
         if(config == null){
             handler.onFailure(new JentisException("[JENTIS] Call initTracking first"));
             log.error("[JENTIS] Call initTracking first");
@@ -135,8 +143,7 @@ public class TrackService {
             }
         }
 
-//        sendConsentSettings(String consentId, Map<String, Boolean> consents, Map<String, Boolean> vendorsChanged)
-//        sendConsentSettings(consentId: consentId, vendors: consents, vendorsChanged: vendorsChanged, completion: completion)
+        sendConsentSettings(consentId, consents, vendorsChanged);
     }
 
 
@@ -146,13 +153,15 @@ public class TrackService {
      * Parameter debugId: (optional) Set the ID when enabling debugging
      * Parameter version: (otpional) Set the version when enabling debugging
      */
-    public void setConsents(Boolean shouldDebug, String debugId, String version) {
+    public void debugTracking(Boolean shouldDebug, String debugId, String version) {
         if(config == null){
             log.error("[JENTIS] Call initTracking first");
             return;
         }
+        JentisLogger.disableLogging(!shouldDebug);
+
         if(shouldDebug ){
-            if(debugId != null && version != null) {
+            if(debugId == null || version == null) {
                 log.error("[JENTIS] Set debugId & version to debug");
                 return;
             }
@@ -172,37 +181,42 @@ public class TrackService {
      *
      * @param data: Contains the key:value pairs
      */
-    public void push(Map<String, Object> data) {
-        if(config == null){
-            log.error("[JENTIS] Call initTracking first");
-            return;
-        }
+    public void push(Map<String, String> data) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                if(config == null){
+                    log.error("[JENTIS] Call initTracking first");
+                    return;
+                }
 
-        if(isTrackingDisabled()) {
-            // User disabled all Tracking options - discard tracking
-            currentTracks = new ArrayList<String>();
-            currentProperties = new HashMap<>();
-            log.error("[JENTIS]: not tracking - all vendors are set to false");
-            return;
-        }
+                if(isTrackingDisabled()) {
+                    // User disabled all Tracking options - discard tracking
+                    currentTracks = new ArrayList<String>();
+                    currentProperties = new HashMap<>();
+                    log.error("[JENTIS]: not tracking - all vendors are set to false");
+                    return;
+                }
 
-        String trackString = (String) data.get(Tracking.trackKey);
-        if(trackString == null){
-            log.error("[JENTIS] track not included");
-        }
-        currentTracks.add(trackString);
+                String trackString = (String) data.get(Tracking.trackKey);
+                if(trackString == null){
+                    log.error("[JENTIS] track not included");
+                }
+                currentTracks.add(trackString);
 
-        for (String entryKey: data.keySet())
-        {
-            if(entryKey != Tracking.trackKey) {
-                currentProperties.put(entryKey, data.get(entryKey));
+                for (String entryKey: data.keySet())
+                {
+                    if(entryKey != Tracking.trackKey) {
+                        currentProperties.put(entryKey, data.get(entryKey));
+                    }
+                }
+
+
+                if (trackString.equalsIgnoreCase(Tracking.TRACK.SUBMIT.toString())) {
+                    submitPush();
+                }
             }
-        }
-
-
-        if (trackString == Tracking.TRACK.SUBMIT.toString()) {
-//            submitPush()
-        }
+        });
     }
 
     /**
@@ -212,49 +226,103 @@ public class TrackService {
      * @param vendors: contains the vendors list with their corresponding consent
      * @param vendorsChanged: contains the map of changed vendors with their corresponding consent
      */
-    private void sendConsentSettings(String consentId, Map<String, Boolean> vendors, Map<String, Boolean> vendorsChanged, ResultHandler<Object> resultHandler) {
+    private void sendConsentSettings(String consentId, Map<String, Boolean> vendors, Map<String, Boolean> vendorsChanged) {
 
-        if(!isSessionValid()){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                if(!isSessionValid()){
+                    sessionId = Utils.generateRandomUUID();
+                }
+
+                JentisData trackingData = new JentisData();
+                Parent parent = new Parent();
+                parent.setUser(userId);
+                parent.setSession(sessionId);
+
+                trackingData.setClient(getClient());
+                trackingData.getData().add(TrackServiceUtils.getUserData(parent, config));
+                trackingData.getData().add(TrackServiceUtils.getConsentData(parent, consentId, vendors, vendorsChanged, config, context));
+
+                Api.getInstance().setConsentSettings(trackingData, new ResultHandler<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        consents = vendors;
+                        UserSettings.getInstance(context).setConsents(vendors);
+                        UserSettings.getInstance(context).setConsentId(consentId);
+
+                        if(isTrackingDisabled()){
+                            // User disabled all Tracking options - discard tracking
+                            storedTrackings = new ArrayList<JsonObject>();
+                            log.info("[JENTIS]: clearing stored trackings - all vendors are set to false");
+                            return;
+                        }
+
+                        // User set consents - send stored trackings
+                        ArrayList<JsonObject> currentlyStoredTrackings = storedTrackings;
+
+                        for (JsonObject storedTracking: currentlyStoredTrackings) {
+                            Api.getInstance().submitTracking(storedTracking, null);
+                        }
+
+                        storedTrackings = new ArrayList<JsonObject>();
+                    }
+
+                    @Override
+                    public void onFailure(JentisException e) {
+                        log.error(e.getLocalizedMessage(), e);
+                    }
+                });
+            }
+        });
+    }
+
+    private void submitPush(){
+        if(!isSessionValid()) {
             sessionId = Utils.generateRandomUUID();
         }
 
-        JentisData trackingData = new JentisData();
-        Parent parent = new Parent();
-        parent.setUser(userId);
-        parent.setSession(sessionId);
+        JentisData eventData = TrackServiceUtils.getTrackingData(getClient(), userId, sessionId, config, debugInformation, consents, currentTracks, context);
 
-        trackingData.setClient(getClient());
-        trackingData.getData().add(TrackServiceUtils.getUserData(parent, config));
-        trackingData.getData().add(TrackServiceUtils.getConsentData(parent, consentId, vendors, vendorsChanged, config, context));
+        currentTracks = new ArrayList<String>();
 
-        Api.getInstance().setConsentSettings(trackingData, resultHandler);
-//        API.shared.setConsentSettings(trackingData) { [weak self] result in
-//
-//            switch result {
-//                case .success:
-//                self.consents = vendors
-//                    UserSettings.shared.setConsents(vendors)
-//                    UserSettings.shared.setConsentId(consentId)
-//                case .failure:
-//                return
-//            }
-//
-//            if self.isTrackingDisabled() {
-//                // User disabled all Tracking options - discard tracking
-//                self.storedTrackings = []
-//                print("[JENTIS]: clearing stored trackings - all vendors are set to false")
-//                return
-//            }
-//
-//            // User set consents - send stored trackings
-//            let currentlyStoredTrackings = self.storedTrackings
-//
-//            for storedTracking in currentlyStoredTrackings {
-//                API.shared.submitTracking(storedTracking) { _ in }
-//            }
-//
-//            self.storedTrackings = []
-//        }
+        if(eventData == null) {
+            log.error("[JENTIS] Error - Failed to get tracking data");
+            return;
+        }
+
+        JsonObject data = eventData.toJSON();
+        JsonArray properties = data.get("data").getAsJsonArray();
+
+        for (JsonElement element: properties) {
+            if(element.getAsJsonObject().get("documentType").getAsString().equalsIgnoreCase(DocumentType.EVENT.toString())) {
+                JsonObject prop = element.getAsJsonObject().get("property").getAsJsonObject();
+
+                if(currentProperties != null){
+                    for (String entryKey: currentProperties.keySet())
+                    {
+                        prop.addProperty(entryKey, (String) currentProperties.get(entryKey));
+                    }
+                }
+            }
+        }
+
+        if(isTrackingDisabled() || consents.keySet().size() == 0) {
+            storedTrackings.add(data);
+        } else {
+
+            Api.getInstance().submitTracking(data, new ResultHandler<Object>() {
+                @Override
+                public void onSuccess(Object data) {
+                    log.info(data);
+                }
+
+                @Override
+                public void onFailure(JentisException e) {
+                    log.info(data);
+                }
+            });
+        }
     }
 
     /**
@@ -272,8 +340,8 @@ public class TrackService {
         }
     }
 
-    public Boolean isTrackingDisabled() {
-        if(consents == null) {
+    private Boolean isTrackingDisabled() {
+        if(consents == null || consents.keySet().size() == 0) {
             return false;
         }
 
@@ -287,13 +355,13 @@ public class TrackService {
             }
         }
 
-        return !allConsentsDisabled;
+        return allConsentsDisabled;
     }
 
-    public Client getClient() {
+    private Client getClient() {
         Client client = new Client();
         client.setClientTimestamp(System.currentTimeMillis());
-        client.setDomain(Utils.deletingPrefix(config.trackDomain, Tracking.trackingDomainPrefix));
+        client.setDomain("." + Utils.deletingPrefix(config.trackDomain, Tracking.trackingDomainPrefix));
         return client;
     }
 }

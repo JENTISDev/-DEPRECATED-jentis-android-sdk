@@ -1,5 +1,9 @@
 package com.jentis.tracking;
 
+import androidx.annotation.RestrictTo;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jentis.tracking.model.JentisData;
 import com.jentis.tracking.model.JentisException;
 import com.jentis.tracking.model.JentisLogger;
@@ -21,12 +25,19 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Api {
     private static Api INSTANCE = null;
     private String baseUrl;
     
     private Api() {};
 
+    private final String TAG = "JENTIS-API";
+
+    /**
+     * create the singleton instance of the Api class
+     * @return initialize Api instance
+     */
     public static Api getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new Api();
@@ -34,85 +45,39 @@ public class Api {
         return(INSTANCE);
     }
 
-
+    /**
+     * set the base url for further api calls
+     */
     public void setup(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 
-    public void performPostCall(String requestURL, String postDataParams, ResultHandler<Object> resultHandler) {
-
-        URL url;
-        String response = "";
-        try {
-            url = new URL(requestURL);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(postDataParams);
-
-            writer.flush();
-            writer.close();
-            os.close();
-            int responseCode=conn.getResponseCode();
-
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-                String line;
-                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line=br.readLine()) != null) {
-                    response+=line;
-                }
-            }
-            else {
-                resultHandler.onSuccess("");
-            }
-        } catch (Exception e) {
-            resultHandler.onFailure(new JentisException(e.getLocalizedMessage(), e));
-            e.printStackTrace();
-        }
-
-        resultHandler.onSuccess(response);
-    }
-
-    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for(Map.Entry<String, String> entry : params.entrySet()){
-            if (first)
-                first = false;
-            else
-                result.append("&");
-
-            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-        }
-
-        return result.toString();
-    }
-
+    /**
+     * Creates the body for setConsent api call and uses submitTracking for the api call itself
+     * @param trackingData: the object that will be transformed into Json and after that into string
+     * @param resultHandler: response handler
+     */
     public void setConsentSettings(JentisData trackingData, ResultHandler<Object> resultHandler) {
         try {
-            String jsonData = trackingData.toJSON();
+            JsonObject jsonData = trackingData.toJSON();
             submitTracking(jsonData, resultHandler);
         } catch (Exception e) {
-            JentisLogger.getLogger("Api").error(e);
+            JentisLogger.getLogger(TAG).error(e);
         }
     }
 
-    public void submitTracking(String data, ResultHandler<Object> resultHandler) {
+    /**
+     * Creates the body for submitTracking api call
+     * @param data: the JsonObject that will be transformed into string
+     * @param resultHandler: response handler
+     */
+    public void submitTracking(JsonObject data, ResultHandler<Object> resultHandler) {
         if(baseUrl == null){
             return;
         }
 
-        performPostCall(baseUrl, data, resultHandler);
+        String jsonString = new Gson().toJson(data);
+        Networking sendPostReqAsyncTask = new Networking(baseUrl, jsonString, resultHandler);
+        sendPostReqAsyncTask.execute();
     }
 }

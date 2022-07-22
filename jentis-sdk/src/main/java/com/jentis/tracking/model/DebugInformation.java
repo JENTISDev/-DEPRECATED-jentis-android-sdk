@@ -1,5 +1,8 @@
 package com.jentis.tracking.model;
 
+import androidx.annotation.RestrictTo;
+
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class DebugInformation {
     Boolean debugEnabled;
     String debugId;
@@ -12,6 +15,30 @@ public class DebugInformation {
     public DebugInformation(Boolean debugEnabled, String debugId, String version) {
         this.debugEnabled = debugEnabled;
         this.debugId = debugId;
+        this.version = version;
+    }
+
+    public Boolean getDebugEnabled() {
+        return debugEnabled;
+    }
+
+    public void setDebugEnabled(Boolean debugEnabled) {
+        this.debugEnabled = debugEnabled;
+    }
+
+    public String getDebugId() {
+        return debugId;
+    }
+
+    public void setDebugId(String debugId) {
+        this.debugId = debugId;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
         this.version = version;
     }
 }

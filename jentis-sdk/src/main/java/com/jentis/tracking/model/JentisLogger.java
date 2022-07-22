@@ -2,6 +2,8 @@ package com.jentis.tracking.model;
 
 import android.util.Log;
 
+import androidx.annotation.RestrictTo;
+
 /*
     Log4Android - Simple Logging Wrapper Library for Android.
 
@@ -21,6 +23,7 @@ import android.util.Log;
     limitations under the License.
 */
 
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class JentisLogger {
 
     private static final String DELIM_STR = "{}";

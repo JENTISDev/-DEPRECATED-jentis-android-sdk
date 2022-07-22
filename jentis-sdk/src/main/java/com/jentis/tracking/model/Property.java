@@ -1,19 +1,27 @@
 package com.jentis.tracking.model;
 
+import androidx.annotation.RestrictTo;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.jentis.tracking.Utils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Property {
     String appDeviceBrand, appDeviceModel, appDeviceOS, appDeviceRegion, appDeviceOSVersion;
     String appDeviceLanguage;
     Integer appDeviceWidth, appDeviceHeight;
-    String appApplicationName, appApplicationVersion;
-    String appApplicationBuildNumber;
+    String applicationName, applicationVersion;
+    Integer applicationBuildNumber;
     String jtsDebug, jtsVersion;
-    String[] jtspushedcommands;
+    ArrayList<String> jtspushedcommands;
     String documentRef;
     String documentTitle;
     String windowLocationHref;
@@ -29,7 +37,7 @@ public class Property {
     public Property() {
     }
 
-    public Property(String appDeviceBrand, String appDeviceModel, String appDeviceOS, String appDeviceRegion, String appDeviceOSVersion, String appDeviceLanguage, Integer appDeviceWidth, Integer appDeviceHeight, String appApplicationName, String appApplicationVersion, String appApplicationBuildNumber, String jtsDebug, String jtsVersion, String[] jtspushedcommands, String documentRef, String documentTitle, String windowLocationHref, Integer dateNow, String userDocID, String eventDocID, String documentLocationHref, String track, String consentid, Long lastupdate, Map<String, Boolean> vendors, Boolean send, Boolean userconsent, Map<String, Boolean> vendorsChanged) {
+    public Property(String appDeviceBrand, String appDeviceModel, String appDeviceOS, String appDeviceRegion, String appDeviceOSVersion, String appDeviceLanguage, Integer appDeviceWidth, Integer appDeviceHeight, String applicationName, String applicationVersion, Integer applicationBuildNumber, String jtsDebug, String jtsVersion, ArrayList<String> jtspushedcommands, String documentRef, String documentTitle, String windowLocationHref, Integer dateNow, String userDocID, String eventDocID, String documentLocationHref, String track, String consentid, Long lastupdate, Map<String, Boolean> vendors, Boolean send, Boolean userconsent, Map<String, Boolean> vendorsChanged) {
         this.appDeviceBrand = appDeviceBrand;
         this.appDeviceModel = appDeviceModel;
         this.appDeviceOS = appDeviceOS;
@@ -38,9 +46,9 @@ public class Property {
         this.appDeviceLanguage = appDeviceLanguage;
         this.appDeviceWidth = appDeviceWidth;
         this.appDeviceHeight = appDeviceHeight;
-        this.appApplicationName = appApplicationName;
-        this.appApplicationVersion = appApplicationVersion;
-        this.appApplicationBuildNumber = appApplicationBuildNumber;
+        this.applicationName = applicationName;
+        this.applicationVersion = applicationVersion;
+        this.applicationBuildNumber = applicationBuildNumber;
         this.jtsDebug = jtsDebug;
         this.jtsVersion = jtsVersion;
         this.jtspushedcommands = jtspushedcommands;
@@ -93,15 +101,15 @@ public class Property {
     }
 
     public String getAppApplicationName() {
-        return appApplicationName;
+        return applicationName;
     }
 
     public String getAppApplicationVersion() {
-        return appApplicationVersion;
+        return applicationVersion;
     }
 
-    public String getAppApplicationBuildNumber() {
-        return appApplicationBuildNumber;
+    public Integer getAppApplicationBuildNumber() {
+        return applicationBuildNumber;
     }
 
     public String getJtsDebug() {
@@ -112,7 +120,7 @@ public class Property {
         return jtsVersion;
     }
 
-    public String[] getJtspushedcommands() {
+    public ArrayList<String> getJtspushedcommands() {
         return jtspushedcommands;
     }
 
@@ -204,16 +212,16 @@ public class Property {
         this.appDeviceHeight = appDeviceHeight;
     }
 
-    public void setAppApplicationName(String appApplicationName) {
-        this.appApplicationName = appApplicationName;
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
 
-    public void setAppApplicationVersion(String appApplicationVersion) {
-        this.appApplicationVersion = appApplicationVersion;
+    public void setApplicationVersion(String applicationVersion) {
+        this.applicationVersion = applicationVersion;
     }
 
-    public void setAppApplicationBuildNumber(String appApplicationBuildNumber) {
-        this.appApplicationBuildNumber = appApplicationBuildNumber;
+    public void setApplicationBuildNumber(Integer applicationBuildNumber) {
+        this.applicationBuildNumber = applicationBuildNumber;
     }
 
     public void setJtsDebug(String jtsDebug) {
@@ -224,7 +232,7 @@ public class Property {
         this.jtsVersion = jtsVersion;
     }
 
-    public void setJtspushedcommands(String[] jtspushedcommands) {
+    public void setJtspushedcommands(ArrayList<String> jtspushedcommands) {
         this.jtspushedcommands = jtspushedcommands;
     }
 
@@ -284,43 +292,44 @@ public class Property {
         this.vendorsChanged = vendorsChanged;
     }
 
-    public String toJSON() {
-        JSONObject jsonObject= new JSONObject();
-        try {
-            jsonObject.put("app_device_model", getAppDeviceModel());
-            jsonObject.put("app_device_brand", getAppDeviceBrand());
-            jsonObject.put("app_device_os", getAppDeviceOS());
-            jsonObject.put("app_device_os_version", getAppDeviceOSVersion());
-            jsonObject.put("app_device_language", getAppDeviceLanguage());
-            jsonObject.put("app_device_region", getAppDeviceRegion());
-            jsonObject.put("app_device_width", getAppDeviceWidth());
-            jsonObject.put("app_device_height", getAppDeviceHeight());
-            jsonObject.put("app_application_name", getAppApplicationName());
-            jsonObject.put("app_application_version", getAppApplicationVersion());
-            jsonObject.put("app_application_build_number", getAppApplicationBuildNumber());
-            jsonObject.put("jts_debug", getJtsDebug());
-            jsonObject.put("jts_version", getJtsVersion());
-            jsonObject.put("jtspushedcommands", getJtspushedcommands());
-            jsonObject.put("document_ref", getDocumentRef());
-            jsonObject.put("document_title", getDocumentTitle());
-            jsonObject.put("window_location_href", getWindowLocationHref());
-            jsonObject.put("date_now", getDateNow());
-            jsonObject.put("user_doc_id", getUserDocID());
-            jsonObject.put("event_doc_id", getEventDocID());
-            jsonObject.put("document_location_href", getDocumentLocationHref());
-            jsonObject.put("track", getTrack());
-            jsonObject.put("consentid", getConsentid());
-            jsonObject.put("lastupdate", getLastupdate());
-            jsonObject.put("vendors", getVendors());
-            jsonObject.put("send", getSend());
-            jsonObject.put("userconsent", getUserconsent());
-            jsonObject.put("vendorsChanged", getVendorsChanged());
-
-            return jsonObject.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return "";
+    public JsonObject toJSON() {
+        JsonObject jsonObject= new JsonObject();
+        jsonObject.addProperty("app_device_model", getAppDeviceModel());
+        jsonObject.addProperty("app_device_brand", getAppDeviceBrand());
+        jsonObject.addProperty("app_device_os", getAppDeviceOS());
+        jsonObject.addProperty("app_device_os_version", getAppDeviceOSVersion());
+        jsonObject.addProperty("app_device_language", getAppDeviceLanguage());
+        jsonObject.addProperty("app_device_region", getAppDeviceRegion());
+        jsonObject.addProperty("app_device_width", getAppDeviceWidth());
+        jsonObject.addProperty("app_device_height", getAppDeviceHeight());
+        jsonObject.addProperty("app_application_name", getAppApplicationName());
+        jsonObject.addProperty("app_application_version", getAppApplicationVersion());
+        jsonObject.addProperty("app_application_build_number", getAppApplicationBuildNumber());
+        jsonObject.addProperty("jts_debug", getJtsDebug());
+        jsonObject.addProperty("jts_version", getJtsVersion());
+        if(jtspushedcommands != null) {
+            jsonObject.add("jtspushedcommands", Utils.arrayToJsonArray(jtspushedcommands));
         }
+        jsonObject.addProperty("document_ref", getDocumentRef());
+        jsonObject.addProperty("document_title", getDocumentTitle());
+        jsonObject.addProperty("window_location_href", getWindowLocationHref());
+        jsonObject.addProperty("date_now", getDateNow());
+        jsonObject.addProperty("user_doc_id", getUserDocID());
+        jsonObject.addProperty("event_doc_id", getEventDocID());
+        jsonObject.addProperty("document_location_href", getDocumentLocationHref());
+        jsonObject.addProperty("track", getTrack());
+        jsonObject.addProperty("consentid", getConsentid());
+        jsonObject.addProperty("lastupdate", getLastupdate());
+        if(getVendors() != null) {
+            jsonObject.add("vendors", Utils.hashMapToJsonObjectBoolean(getVendors()));
+        }
+        jsonObject.addProperty("send", getSend());
+        jsonObject.addProperty("userconsent", getUserconsent());
+        if(getVendorsChanged() != null) {
+            jsonObject.add("vendorsChanged", Utils.hashMapToJsonObjectBoolean(getVendorsChanged()));
+        }
+
+        return jsonObject;
     }
 
 }

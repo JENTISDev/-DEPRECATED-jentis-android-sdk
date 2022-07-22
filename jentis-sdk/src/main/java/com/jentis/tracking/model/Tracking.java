@@ -1,8 +1,11 @@
 package com.jentis.tracking.model;
 
+import androidx.annotation.RestrictTo;
+
 import com.jentis.tracking.Config;
 import com.jentis.tracking.model.enums.TrackEnum;
 
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Tracking {
     public static Integer idLength = 23;
     public static String pluginId = "jts_push_submit";

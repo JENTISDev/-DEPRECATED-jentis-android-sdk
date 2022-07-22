@@ -1,7 +1,8 @@
 package com.jentis.tracking.model;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class TrackingDataDatum {
     String id;
@@ -101,23 +102,28 @@ public class TrackingDataDatum {
         this.pluginid = pluginid;
     }
 
-    public String toJSON() {
-        JSONObject jsonObject= new JSONObject();
-        try {
-            jsonObject.put("_id", getId());
-            jsonObject.put("action", getAction());
-            jsonObject.put("account", getAccount());
-            jsonObject.put("documentType", getDocumentType());
-            jsonObject.put("property", getProperty());
-            jsonObject.put("system", getSystem());
-            jsonObject.put("aggr", getAggr());
-            jsonObject.put("parent", getParent());
-            jsonObject.put("pluginid", getPluginid());
-
-            return jsonObject.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return "";
+    public JsonObject toJSON() {
+        JsonObject jsonObject= new JsonObject();
+        jsonObject.addProperty("_id", getId());
+        jsonObject.addProperty("action", getAction());
+        jsonObject.addProperty("account", getAccount());
+        jsonObject.addProperty("documentType", getDocumentType());
+        if(getProperty()  != null) {
+            jsonObject.add("property", getProperty().toJSON());
         }
+
+        if(getSystem()  != null) {
+            jsonObject.add("system", getSystem().toJSON());
+        }
+
+        if(getAggr()  != null) {
+            jsonObject.add("aggr", getAggr().toJSON());
+        }
+        if(getParent()  != null) {
+            jsonObject.add("parent", getParent().toJSON());
+        }
+        jsonObject.addProperty("pluginid", getPluginid());
+
+        return jsonObject;
     }
 }

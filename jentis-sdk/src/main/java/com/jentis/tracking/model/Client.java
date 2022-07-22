@@ -1,8 +1,10 @@
 package com.jentis.tracking.model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import androidx.annotation.RestrictTo;
 
+import com.google.gson.JsonObject;
+
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Client {
     Long clientTimestamp;
     String domain = "";
@@ -30,16 +32,11 @@ public class Client {
         this.domain = domain;
     }
 
-    public String toJSON() {
-        JSONObject jsonObject= new JSONObject();
-        try {
-            jsonObject.put("clientTimestamp", getClientTimestamp());
-            jsonObject.put("domain", getDomain());
+    public JsonObject toJSON() {
+        JsonObject jsonObject= new JsonObject();
+        jsonObject.addProperty("clientTimestamp", getClientTimestamp());
+        jsonObject.addProperty("domain", getDomain());
 
-            return jsonObject.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return "";
-        }
+        return jsonObject;
     }
 }

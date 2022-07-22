@@ -1,5 +1,6 @@
 package com.jentis.tracking.model;
 
+
 public enum JentisError {
     SET_CONSENT_ERROR("setConsentError", 0),
     REQUEST_ERROR("requestError", 1);

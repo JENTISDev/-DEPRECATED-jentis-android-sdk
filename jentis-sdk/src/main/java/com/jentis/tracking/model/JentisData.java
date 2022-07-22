@@ -1,10 +1,17 @@
 package com.jentis.tracking.model;
 
+import androidx.annotation.RestrictTo;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.jentis.tracking.Utils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class JentisData {
     Client client;
     Cmd cmd = new Cmd();
@@ -50,17 +57,25 @@ public class JentisData {
         return data;
     }
 
-    public String toJSON() {
-        JSONObject jsonObject= new JSONObject();
-        try {
-            jsonObject.put("client", getClient());
-            jsonObject.put("cmd", getCmd());
-            jsonObject.put("data", getData());
+    public JsonObject toJSON() {
+        JsonObject jsonObject= new JsonObject();
+        JsonArray dataArray = new JsonArray();
 
-            return jsonObject.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return "";
+        if(data != null){
+            for (TrackingDataDatum trackData: data) {
+                dataArray.add(trackData.toJSON());
+            }
         }
+
+        if(client != null) {
+            jsonObject.add("client", client.toJSON());
+        }
+
+        if(cmd != null) {
+            jsonObject.add("cmd", cmd.toJSON());
+        }
+        jsonObject.add("data", dataArray);
+
+        return jsonObject;
     }
 }

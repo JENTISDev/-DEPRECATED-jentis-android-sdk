@@ -1,5 +1,8 @@
 package com.jentis.tracking.model.enums;
 
+import androidx.annotation.RestrictTo;
+
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public enum Environment {
     LIVE("live", 0),
     STAGING("staging", 1);

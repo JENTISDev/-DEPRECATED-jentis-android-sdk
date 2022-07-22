@@ -1,5 +1,8 @@
 package com.jentis.tracking.model.enums;
 
+import androidx.annotation.RestrictTo;
+
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public enum Action {
     UDP("udp", 0),
     NEW("new", 1);

@@ -52,9 +52,9 @@ public class ConsentActivity extends AppCompatActivity{
                 consents.put("easymarketing", easyMarketing.isChecked());
                 consents.put("criteo", criteo.isChecked());
 
-                TrackService.getInstance().setConsents(consents, new ResultHandler<Device>() {
+                TrackService.getInstance().setConsents(consents, new ResultHandler<Object>() {
                     @Override
-                    public void onSuccess(Device data) {
+                    public void onSuccess(Object data) {
 
                     }
 

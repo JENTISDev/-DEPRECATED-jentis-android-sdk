@@ -1,8 +1,13 @@
 package com.jentis.tracking.model;
 
+import androidx.annotation.RestrictTo;
+
+import com.google.gson.JsonObject;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Parent {
     String user;
     String session;
@@ -30,16 +35,11 @@ public class Parent {
         this.session = session;
     }
 
-    public String toJSON() {
-        JSONObject jsonObject= new JSONObject();
-        try {
-            jsonObject.put("user", getUser());
-            jsonObject.put("session", getSession());
+    public JsonObject toJSON() {
+        JsonObject jsonObject= new JsonObject();
+        jsonObject.addProperty("user", getUser());
+        jsonObject.addProperty("session", getSession());
 
-            return jsonObject.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return "";
-        }
+        return jsonObject;
     }
 }

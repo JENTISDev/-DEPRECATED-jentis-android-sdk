@@ -1,8 +1,11 @@
 package com.jentis.tracking.model;
 
+import androidx.annotation.RestrictTo;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Cookie {
 
     String jtsLog, fbp, jtsRw, jtsFbp, jtsGaFeGid, jtsGaFeCid, fbc, jtsFb, ga, gclAu, gclAw, jAdfID, jctrSid, pkSes0066, gatGtagUA220398793_2, jtsGa, jtsGaGid, ctoBundle, ga3Z29BF112E;

@@ -1,5 +1,8 @@
 package com.jentis.tracking.model;
 
+import androidx.annotation.RestrictTo;
+
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public enum Device {
     OS("os", 0),
     BRAND("brand", 1);

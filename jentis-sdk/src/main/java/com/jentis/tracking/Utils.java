@@ -2,15 +2,34 @@ package com.jentis.tracking;
 
 import android.os.Build;
 
+import androidx.annotation.RestrictTo;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.jentis.tracking.model.Tracking;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Utils {
     public static String generateRandomUUID() {
-        return UUID.randomUUID().toString();
+        final String AB = "0123456789";
+        SecureRandom rnd = new SecureRandom();
+
+        StringBuilder sb = new StringBuilder(Tracking.idLength);
+        for(int i = 0; i < Tracking.idLength; i++)
+            sb.append(AB.charAt(rnd.nextInt(AB.length())));
+        return sb.toString();
     }
 
     /**
@@ -23,19 +42,6 @@ public class Utils {
         }
 
         return  word.substring(prefix.length());
-    }
-
-    /**
-     * Retrieves the Device manufacturer and model
-     */
-    public static String getDeviceName() {
-        String manufacturer = Build.MANUFACTURER;
-        String model = Build.MODEL;
-        if (model.toLowerCase().startsWith(manufacturer.toLowerCase())) {
-            return capitalize(model);
-        } else {
-            return capitalize(manufacturer) + " " + model;
-        }
     }
 
     /**
@@ -78,5 +84,45 @@ public class Utils {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
         String dateString = dateFormat.format(date);
         return dateString;
+    }
+
+    /**
+     * Transforms a Date into a String
+     * Returns: a string from the specified date
+     */
+    public static JsonArray arrayToJsonArray(ArrayList<String> data) {
+        JsonArray array = new JsonArray();
+        for (String value: data) {
+            array.add(value);
+        }
+
+        return array;
+    }
+
+    public static JsonObject hashMapToJsonObjectString(Map<String, String> data) {
+        JsonObject obj = new JsonObject();
+
+        for (String entryKey: data.keySet())
+        {
+            obj.addProperty(entryKey, data.get(entryKey));
+        }
+
+        return obj;
+    }
+
+    /**
+     * Transforms a Hashmap into a JsonObject
+     * @param data : the hashmap that needs to be
+     * @return : the newly created JsonObject
+     */
+    public static JsonObject hashMapToJsonObjectBoolean(Map<String, Boolean> data) {
+        JsonObject obj = new JsonObject();
+
+        for (String entryKey: data.keySet())
+        {
+            obj.addProperty(entryKey, data.get(entryKey));
+        }
+
+        return obj;
     }
 }
