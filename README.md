@@ -54,7 +54,7 @@ From now on you can track data using the `push` method. Pass key-value pairs to 
 
 ### Example usage
 
-Example usage when the user navigates to a new screen (with custom properties included - use the String extension `jentisToJSON` to convert any JSON String to an appropriate Any? Object):
+Example usage when the user navigates to a new screen:
 
 ```java
  HashMap<String, String> dataView = new HashMap<>();
