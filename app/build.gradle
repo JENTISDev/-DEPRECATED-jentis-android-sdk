@@ -28,7 +28,7 @@ android {
 }
 
 dependencies {
-    implementation project(":jentis-sdk")
+    implementation project(':jentis-tracking-sdk')
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'

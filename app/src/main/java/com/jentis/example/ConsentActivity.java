@@ -7,9 +7,9 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.jentis.analytics.JentisTrackService;
-import com.jentis.analytics.model.JentisException;
-import com.jentis.analytics.model.interfaces.ResultHandler;
+import com.jentis.tracking.sdk.JentisTrackService;
+import com.jentis.tracking.sdk.model.JentisException;
+import com.jentis.tracking.sdk.model.interfaces.ResultHandler;
 
 import java.util.HashMap;
 import java.util.Map;

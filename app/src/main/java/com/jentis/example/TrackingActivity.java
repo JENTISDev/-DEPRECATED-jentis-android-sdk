@@ -7,7 +7,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.jentis.analytics.JentisTrackService;
+import com.jentis.tracking.sdk.JentisTrackService;
 
 import java.util.HashMap;
 

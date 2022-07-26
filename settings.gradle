@@ -1,18 +1,17 @@
 pluginManagement {
     repositories {
+        mavenCentral()
         gradlePluginPortal()
         google()
-        mavenCentral()
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
+        google()
     }
 }
-rootProject.name = "My Application"
+rootProject.name = "Jentis Application"
 include ':app'
-include ':jentis-sdk'
+include ':jentis-tracking-sdk'

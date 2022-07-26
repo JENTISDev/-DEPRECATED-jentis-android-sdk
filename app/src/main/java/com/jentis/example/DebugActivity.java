@@ -8,7 +8,7 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.jentis.analytics.JentisTrackService;
+import com.jentis.tracking.sdk.JentisTrackService;
 
 public class DebugActivity extends AppCompatActivity{
 

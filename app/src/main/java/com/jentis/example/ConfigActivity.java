@@ -7,8 +7,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.jentis.analytics.JentisTrackService;
-import com.jentis.analytics.model.JentisTrackConfig;
+import com.jentis.tracking.sdk.JentisTrackService;
+import com.jentis.tracking.sdk.JentisTrackConfig;
 
 public class ConfigActivity extends AppCompatActivity{
 

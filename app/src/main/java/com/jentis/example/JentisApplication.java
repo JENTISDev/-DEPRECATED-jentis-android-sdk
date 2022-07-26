@@ -2,8 +2,8 @@ package com.jentis.example;
 
 import android.app.Application;
 
-import com.jentis.analytics.JentisTrackService;
-import com.jentis.analytics.model.JentisTrackConfig;
+import com.jentis.tracking.sdk.JentisTrackService;
+import com.jentis.tracking.sdk.JentisTrackConfig;
 
 public class JentisApplication extends Application {
 
