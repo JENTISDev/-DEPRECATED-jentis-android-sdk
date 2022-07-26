@@ -2,8 +2,8 @@ package com.jentis.example;
 
 import android.app.Application;
 
-import com.jentis.tracking.TrackService;
-import com.jentis.tracking.model.TrackConfig;
+import com.jentis.analytics.JentisTrackService;
+import com.jentis.analytics.model.JentisTrackConfig;
 
 public class JentisApplication extends Application {
 
@@ -11,6 +11,6 @@ public class JentisApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        TrackService.getInstance().initTracking(this, new TrackConfig(getString(R.string.jentis_track_domain), getString(R.string.jentis_track_id), getString(R.string.jentis_environment)));
+        JentisTrackService.getInstance().initTracking(this, new JentisTrackConfig(getString(R.string.jentis_track_domain), getString(R.string.jentis_track_id), getString(R.string.jentis_environment)));
     }
 }

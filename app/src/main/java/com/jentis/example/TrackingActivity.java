@@ -7,8 +7,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.jentis.tracking.TrackService;
-import com.jentis.tracking.model.TrackConfig;
+import com.jentis.analytics.JentisTrackService;
 
 import java.util.HashMap;
 
@@ -36,7 +35,7 @@ public class TrackingActivity extends AppCompatActivity{
                 data.put("pagetitle", pageView.getText().toString());
                 data.put("virtualPagePath", virtualPagePath.getText().toString());
 
-                TrackService.getInstance().push(data);
+                JentisTrackService.getInstance().push(data);
             }
         });
     }

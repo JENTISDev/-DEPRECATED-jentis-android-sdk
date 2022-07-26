@@ -1,6 +1,5 @@
 package com.jentis.example;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,8 +7,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.jentis.tracking.TrackService;
-import com.jentis.tracking.model.TrackConfig;
+import com.jentis.analytics.JentisTrackService;
+import com.jentis.analytics.model.JentisTrackConfig;
 
 public class ConfigActivity extends AppCompatActivity{
 
@@ -29,8 +28,8 @@ public class ConfigActivity extends AppCompatActivity{
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TrackConfig config = new TrackConfig(trackDomain.getText().toString(), trackId.getText().toString(), environment.getText().toString());
-                TrackService.getInstance().initTracking(getApplicationContext(), config);
+                JentisTrackConfig config = new JentisTrackConfig(trackDomain.getText().toString(), trackId.getText().toString(), environment.getText().toString());
+                JentisTrackService.getInstance().initTracking(getApplicationContext(), config);
             }
         });
     }

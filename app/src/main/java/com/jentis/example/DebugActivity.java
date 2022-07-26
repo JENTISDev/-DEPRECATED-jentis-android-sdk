@@ -8,8 +8,7 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.jentis.tracking.TrackService;
-import com.jentis.tracking.model.TrackConfig;
+import com.jentis.analytics.JentisTrackService;
 
 public class DebugActivity extends AppCompatActivity{
 
@@ -30,7 +29,7 @@ public class DebugActivity extends AppCompatActivity{
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TrackService.getInstance().debugTracking(enabledSwitch.isChecked(), debugId.getText().toString(), debugVersion.getText().toString());
+                JentisTrackService.getInstance().debugTracking(enabledSwitch.isChecked(), debugId.getText().toString(), debugVersion.getText().toString());
             }
         });
     }

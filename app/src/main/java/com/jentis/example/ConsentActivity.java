@@ -7,10 +7,9 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.jentis.tracking.TrackService;
-import com.jentis.tracking.model.Device;
-import com.jentis.tracking.model.JentisException;
-import com.jentis.tracking.model.interfaces.ResultHandler;
+import com.jentis.analytics.JentisTrackService;
+import com.jentis.analytics.model.JentisException;
+import com.jentis.analytics.model.interfaces.ResultHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +24,7 @@ public class ConsentActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consent);
 
-        Map<String, Boolean> consents = TrackService.getInstance().getCurrentConsents();
+        Map<String, Boolean> consents = JentisTrackService.getInstance().getCurrentConsents();
         xandr = findViewById(R.id.xandrSwitch);
         googleAnalytics = findViewById(R.id.googleSwitch);
         facebook = findViewById(R.id.facebookSwitch);
@@ -52,7 +51,7 @@ public class ConsentActivity extends AppCompatActivity{
                 consents.put("easymarketing", easyMarketing.isChecked());
                 consents.put("criteo", criteo.isChecked());
 
-                TrackService.getInstance().setConsents(consents, new ResultHandler<Object>() {
+                JentisTrackService.getInstance().setConsents(consents, new ResultHandler<Object>() {
                     @Override
                     public void onSuccess(Object data) {
 

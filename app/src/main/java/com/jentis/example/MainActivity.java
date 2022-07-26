@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.jentis.tracking.Api;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button config, debug, consent, tracking ;
