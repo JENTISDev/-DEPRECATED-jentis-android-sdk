@@ -2,9 +2,23 @@
 
 Jentis is a Package to support app Tracking to Jentis.
 
+## Integration settings
+
+In order to integrate with Jentis SDK you will have to add the following line in the App build.gradle dependencies section. `mavenCentral()` is also required in settings.gradle repositories section.
+
+```java
+
+implementation 'com.jentis:jentis-tracking-sdk:1.0.0'
+
+repositories {
+        mavenCentral()
+}
+
+```
+
 ## Basic usage
 
-First setup the `JentisTrackService` by passing the application context and a `JentisTrackConfig` object to the `initTracking` method (on App Start).
+First setup the `JentisTrackService` by passing the application context and a `JentisTrackConfig` object to the `initTracking` method. This should pe added either in the Application `onCreate` or in the first Activity.
 
 ```java
 
@@ -16,7 +30,7 @@ JentisTrackService.getInstance().initTracking(getApplicationContext(), config);
 Afterwards, let the user setup the vendors he allows tracking to. Use the `setConsents` method to pass a Map of String, Bool key pair values of vendors to the SDK.
 The setConsents method returns whether it was successful or not.
 
-```swift
+```java
 HashMap<String, Boolean> consents = new HashMap<String, Boolean>();
  consents.put("googleanalytics", true);
  consents.put("easymarketing", false);
@@ -77,7 +91,7 @@ Use the `debugTracking` method to enable/disable debugging.
 
 ### Enable Debugging
 
-```swift
+```java
 JentisTrackService.getInstance().debugTracking(true, "62a9e9c727255", "2");
 ```
 
