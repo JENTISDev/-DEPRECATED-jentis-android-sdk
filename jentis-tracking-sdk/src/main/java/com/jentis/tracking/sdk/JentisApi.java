@@ -37,7 +37,7 @@ class JentisApi {
      * @param trackingData: the object that will be transformed into Json and after that into string
      * @param resultHandler: response handler
      */
-    public void setConsentSettings(JentisData trackingData, ResultHandler<Object> resultHandler) {
+    public void setConsentSettings(JentisData trackingData, ResultHandler<Boolean> resultHandler) {
         try {
             JsonObject jsonData = trackingData.toJSON();
             submitTracking(jsonData, resultHandler);
@@ -51,7 +51,7 @@ class JentisApi {
      * @param data: the JsonObject that will be transformed into string
      * @param resultHandler: response handler
      */
-    public void submitTracking(JsonObject data, ResultHandler<Object> resultHandler) {
+    public void submitTracking(JsonObject data, ResultHandler<Boolean> resultHandler) {
         if(baseUrl == null){
             return;
         }

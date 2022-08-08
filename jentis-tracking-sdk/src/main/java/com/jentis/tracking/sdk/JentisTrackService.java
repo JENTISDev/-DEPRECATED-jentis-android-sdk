@@ -13,6 +13,7 @@ import com.jentis.tracking.sdk.model.JentisException;
 import com.jentis.tracking.sdk.model.JentisLogger;
 import com.jentis.tracking.sdk.model.Parent;
 import com.jentis.tracking.sdk.model.Tracking;
+import com.jentis.tracking.sdk.model.TrackingDataDatum;
 import com.jentis.tracking.sdk.model.enums.DocumentType;
 import com.jentis.tracking.sdk.model.interfaces.ResultHandler;
 
@@ -112,7 +113,7 @@ public class JentisTrackService {
      * Parameter consents: A list of the new Consents with true/false
      * Parameter completion: Contains the information whether the request was successful or not
      */
-    public void setConsents(HashMap<String, Boolean> consents, ResultHandler<Object> handler) {
+    public void setConsents(HashMap<String, Boolean> consents, ResultHandler<Boolean> handler) {
         if(config == null){
             handler.onFailure(new JentisException("[JENTIS] Call initTracking first"));
             log.error("[JENTIS] Call initTracking first");
@@ -137,7 +138,7 @@ public class JentisTrackService {
             }
         }
 
-        sendConsentSettings(consentId, consents, vendorsChanged);
+        sendConsentSettings(consentId, consents, vendorsChanged, handler);
     }
 
 
@@ -175,7 +176,7 @@ public class JentisTrackService {
      *
      * @param data: Contains the key:value pairs
      */
-    public void push(Map<String, String> data) {
+    public void push(Map<String, Object> data) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -220,7 +221,7 @@ public class JentisTrackService {
      * @param vendors: contains the vendors list with their corresponding consent
      * @param vendorsChanged: contains the map of changed vendors with their corresponding consent
      */
-    private void sendConsentSettings(String consentId, Map<String, Boolean> vendors, Map<String, Boolean> vendorsChanged) {
+    private void sendConsentSettings(String consentId, Map<String, Boolean> vendors, Map<String, Boolean> vendorsChanged, ResultHandler<Boolean> handler) {
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -238,9 +239,9 @@ public class JentisTrackService {
                 trackingData.getData().add(JentisTrackServiceUtils.getUserData(parent, config));
                 trackingData.getData().add(JentisTrackServiceUtils.getConsentData(parent, consentId, vendors, vendorsChanged, config, context));
 
-                JentisApi.getInstance().setConsentSettings(trackingData, new ResultHandler<Object>() {
+                JentisApi.getInstance().setConsentSettings(trackingData, new ResultHandler<Boolean>() {
                     @Override
-                    public void onSuccess(Object data) {
+                    public void onSuccess(Boolean success) {
                         consents = vendors;
                         JentisSharedPrefs.getInstance(context).setConsents(vendors);
                         JentisSharedPrefs.getInstance(context).setConsentId(consentId);
@@ -260,11 +261,13 @@ public class JentisTrackService {
                         }
 
                         storedTrackings = new ArrayList<JsonObject>();
+                        handler.onSuccess(true);
                     }
 
                     @Override
                     public void onFailure(JentisException e) {
                         log.error(e.getLocalizedMessage(), e);
+                        handler.onFailure(e);
                     }
                 });
             }
@@ -293,9 +296,15 @@ public class JentisTrackService {
                 JsonObject prop = element.getAsJsonObject().get("property").getAsJsonObject();
 
                 if(currentProperties != null){
-                    for (String entryKey: currentProperties.keySet())
-                    {
-                        prop.addProperty(entryKey, (String) currentProperties.get(entryKey));
+                    for (String entryKey: currentProperties.keySet()) {
+
+                        if (currentProperties.get(entryKey) instanceof String) {
+                            prop.addProperty(entryKey, (String) currentProperties.get(entryKey));
+                        } else if (currentProperties.get(entryKey) instanceof ArrayList) {
+                            prop.add(entryKey, JentisUtils.arrayToJsonArray((ArrayList) currentProperties.get(entryKey)));
+                        } else if (currentProperties.get(entryKey) instanceof HashMap) {
+                            prop.add(entryKey, JentisUtils.hashMapToJsonObjectString((HashMap) currentProperties.get(entryKey)));
+                        }
                     }
                 }
             }
@@ -305,15 +314,15 @@ public class JentisTrackService {
             storedTrackings.add(data);
         } else {
 
-            JentisApi.getInstance().submitTracking(data, new ResultHandler<Object>() {
+            JentisApi.getInstance().submitTracking(data, new ResultHandler<Boolean>() {
                 @Override
-                public void onSuccess(Object data) {
-                    log.info(data);
+                public void onSuccess(Boolean success) {
+                    log.info("[JENTIS] - Push data successful");
                 }
 
                 @Override
                 public void onFailure(JentisException e) {
-                    log.info(data);
+                    log.error(e);
                 }
             });
         }

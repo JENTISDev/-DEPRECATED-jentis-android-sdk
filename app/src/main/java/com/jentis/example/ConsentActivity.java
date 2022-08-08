@@ -51,9 +51,9 @@ public class ConsentActivity extends AppCompatActivity{
                 consents.put("easymarketing", easyMarketing.isChecked());
                 consents.put("criteo", criteo.isChecked());
 
-                JentisTrackService.getInstance().setConsents(consents, new ResultHandler<Object>() {
+                JentisTrackService.getInstance().setConsents(consents, new ResultHandler<Boolean>() {
                     @Override
-                    public void onSuccess(Object data) {
+                    public void onSuccess(Boolean data) {
 
                     }
 

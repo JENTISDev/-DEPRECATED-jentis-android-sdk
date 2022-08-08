@@ -106,7 +106,7 @@ class JentisNetworking extends
         }
 
         if(resultHandler != null) {
-            resultHandler.onSuccess(response);
+            resultHandler.onSuccess(true);
         }
         return response;
     }

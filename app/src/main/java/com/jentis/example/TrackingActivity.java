@@ -30,7 +30,7 @@ public class TrackingActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
 
-                HashMap<String, String> data = new HashMap<>();
+                HashMap<String, Object> data = new HashMap<>();
                 data.put("track", event.getText().toString());
                 data.put("pagetitle", pageView.getText().toString());
                 data.put("virtualPagePath", virtualPagePath.getText().toString());
