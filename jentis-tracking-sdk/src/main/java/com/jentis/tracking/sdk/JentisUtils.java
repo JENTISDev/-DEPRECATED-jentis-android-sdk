@@ -92,10 +92,26 @@ public class JentisUtils {
 
     /**
      * Transforms a Hashmap into a JsonObject
-     * @param data : the hashmap that needs to be
+     * @param data : the hashmap that needs to be transformed into JsonObject
      * @return : the newly created JsonObject
      */
     public static JsonObject hashMapToJsonObjectBoolean(Map<String, Boolean> data) {
+        JsonObject obj = new JsonObject();
+
+        for (String entryKey: data.keySet())
+        {
+            obj.addProperty(entryKey, data.get(entryKey));
+        }
+
+        return obj;
+    }
+
+    /**
+     * Transforms a Hashmap into a JsonObject
+     * @param data : the hashmap that needs to be transformed into JsonObject
+     * @return : the newly created JsonObject
+     */
+    public static JsonObject hashMapToJsonObjectString(Map<String, String> data) {
         JsonObject obj = new JsonObject();
 
         for (String entryKey: data.keySet())
