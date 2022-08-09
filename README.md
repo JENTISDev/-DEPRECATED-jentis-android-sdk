@@ -8,7 +8,7 @@ In order to integrate with Jentis SDK you will have to add the following line in
 
 ```java
 
-implementation 'com.jentis:jentis-tracking-sdk:1.0.0'
+implementation 'com.jentis:jentis-tracking-sdk:1.0.1'
 
 repositories {
         mavenCentral()
@@ -35,16 +35,16 @@ HashMap<String, Boolean> consents = new HashMap<String, Boolean>();
  consents.put("googleanalytics", true);
  consents.put("easymarketing", false);
  
-JentisTrackService.getInstance().setConsents(consents, new ResultHandler<Object>() {
-         @Override
-         public void onSuccess(Object data) {
+JentisTrackService.getInstance().setConsents(consents, new ResultHandler<Boolean>() {
+        @Override
+        public void onSuccess(Boolean success) {
 
-         }
+        }
 
-         @Override
-         public void onFailure(JentisException e) {
+        @Override
+        public void onFailure(JentisException e) {
 
-         }
+        }
 });
 ```
 
@@ -71,11 +71,21 @@ From now on you can track data using the `push` method. Pass key-value pairs to 
 Example usage when the user navigates to a new screen:
 
 ```java
- HashMap<String, String> dataView = new HashMap<>();
- dataView.put("track", "pageview");
- dataView.put("pagetitle", "Tracking Screen");
- dataView.put("virtualPagePath", "MainScreen/TrackingScreen");
- dataView.put("customProperty", JsonObject.toString());
+ HashMap<String, Object> properties = new HashMap<>();
+ properties.put("customProp1", "customVal1");
+ properties.put("customProp2", "customVal2");
+ properties.put("customProp3", "customVal3");
+
+ ArrayList<String> customArray = new ArrayList<String>();
+ customArray.add("jentis");
+ customArray.add("sdk");
+
+ HashMap<String, Object> dataView = new HashMap<>();
+ dataView.put("track", event.getText().toString());
+ dataView.put("pagetitle", pageView.getText().toString());
+ dataView.put("virtualPagePath", virtualPagePath.getText().toString());
+ dataView.put("customObject", properties);
+ dataView.put("customArray", customArray);
 
  JentisTrackService.getInstance().push(dataView);
 
