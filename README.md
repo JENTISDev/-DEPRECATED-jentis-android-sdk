@@ -54,11 +54,11 @@ From now on you can track data using the `push` method. Pass key-value pairs to 
 
 | Key  | Description | Example Value(s) |
 | ------------- | ------------- | ------------- |
-| app_device_brand  | The brand of the device | Samsung |
-| app_device_model  | The device model | iPhone14,5 (for iPhone 13, see [Lookup table](https://gist.github.com/adamawolf/3048717) for more Information) |
-| app_device_os | The device operating System | iOS |
-| app_device_os_version | The device os Version | 15.0, 13.1 |
-| app_device_language | The device language | de, en |
+| app_device_brand  | The manufacturer of the device | Samsung |
+| app_device_model  | The device model | GT-S5830L |
+| app_device_os | The device operating System | android |
+| app_device_os_version | The device os Version + SDK_INT | 5.1.1 22 |
+| app_device_language | The device language | English |
 | app_device_region | The device region specified in the device settings (not the current location) | US |
 | app_device_width | The screen width of the device | 390 |
 | app_device_height | The screen height of the device | 844 |
