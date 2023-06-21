@@ -26,6 +26,8 @@ public class TrackingActivity extends AppCompatActivity{
         virtualPagePath = findViewById(R.id.virtualPagePathET);
         submit = findViewById(R.id.submitButton);
 
+        JentisTrackService.getInstance().debugTracking(true, getString(R.string.jentis_debug_id), getString(R.string.jentis_debug_version));
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,6 +36,7 @@ public class TrackingActivity extends AppCompatActivity{
                 data.put("track", event.getText().toString());
                 data.put("pagetitle", pageView.getText().toString());
                 data.put("virtualPagePath", virtualPagePath.getText().toString());
+                data.put("track", "submit");
 
                 JentisTrackService.getInstance().push(data);
             }

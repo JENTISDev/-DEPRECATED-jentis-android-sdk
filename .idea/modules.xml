@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/My_Application.iml" filepath="$PROJECT_DIR$/.idea/modules/My_Application.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/My_Application.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jentis-sdk/My_Application.jentis-tracking-sdk.iml" filepath="$PROJECT_DIR$/.idea/modules/jentis-sdk/My_Application.jentis-tracking-sdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Jentis_Application.iml" filepath="$PROJECT_DIR$/.idea/modules/Jentis_Application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Jentis_Application.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Jentis_Application.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Jentis_Application.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Jentis_Application.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Jentis_Application.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Jentis_Application.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Jentis_Application.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Jentis_Application.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jentis-tracking-sdk/Jentis_Application.jentis-tracking-sdk.iml" filepath="$PROJECT_DIR$/.idea/modules/jentis-tracking-sdk/Jentis_Application.jentis-tracking-sdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jentis-tracking-sdk/Jentis_Application.jentis-tracking-sdk.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/jentis-tracking-sdk/Jentis_Application.jentis-tracking-sdk.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jentis-tracking-sdk/Jentis_Application.jentis-tracking-sdk.main.iml" filepath="$PROJECT_DIR$/.idea/modules/jentis-tracking-sdk/Jentis_Application.jentis-tracking-sdk.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jentis-tracking-sdk/Jentis_Application.jentis-tracking-sdk.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/jentis-tracking-sdk/Jentis_Application.jentis-tracking-sdk.unitTest.iml" />
     </modules>
   </component>
 </project>

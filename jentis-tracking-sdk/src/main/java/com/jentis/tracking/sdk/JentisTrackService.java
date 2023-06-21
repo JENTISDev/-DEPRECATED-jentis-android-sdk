@@ -314,6 +314,9 @@ public class JentisTrackService {
             storedTrackings.add(data);
         } else {
 
+            log.info("[JENTIS] - data");
+            log.info("[JENTIS] - " + data.toString());
+
             JentisApi.getInstance().submitTracking(data, new ResultHandler<Boolean>() {
                 @Override
                 public void onSuccess(Boolean success) {
