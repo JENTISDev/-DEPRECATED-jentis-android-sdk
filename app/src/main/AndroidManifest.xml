@@ -27,6 +27,7 @@
         <activity android:name=".ConsentActivity" />
         <activity android:name=".DebugActivity" />
         <activity android:name=".TrackingActivity" />
+        <activity android:name=".ProductSampleActivity" />
 
     </application>
 
