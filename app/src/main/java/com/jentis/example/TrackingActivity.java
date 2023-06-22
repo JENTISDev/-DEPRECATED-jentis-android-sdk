@@ -36,9 +36,25 @@ public class TrackingActivity extends AppCompatActivity{
                 data.put("track", event.getText().toString());
                 data.put("pagetitle", pageView.getText().toString());
                 data.put("virtualPagePath", virtualPagePath.getText().toString());
-                data.put("track", "submit");
-
                 JentisTrackService.getInstance().push(data);
+//                try {
+//                    Thread.sleep(2000);
+//                } catch (InterruptedException e) {
+//                }
+                data.clear();
+
+                data.put("track", "pageview");
+                data.put("pagetitle", "TrackingScreen2");
+                data.put("virtualPagePath", "MainScreen/TrackingScreen 2");
+                JentisTrackService.getInstance().push(data);
+//                try {
+//                    Thread.sleep(2000);
+//                } catch (InterruptedException e) {
+//                }
+                data.clear();
+                data.put("track", "submit");
+                JentisTrackService.getInstance().push(data);
+
             }
         });
     }

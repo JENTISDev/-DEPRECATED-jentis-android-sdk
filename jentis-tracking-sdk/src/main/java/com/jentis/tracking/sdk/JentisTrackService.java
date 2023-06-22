@@ -13,7 +13,6 @@ import com.jentis.tracking.sdk.model.JentisException;
 import com.jentis.tracking.sdk.model.JentisLogger;
 import com.jentis.tracking.sdk.model.Parent;
 import com.jentis.tracking.sdk.model.Tracking;
-import com.jentis.tracking.sdk.model.TrackingDataDatum;
 import com.jentis.tracking.sdk.model.enums.DocumentType;
 import com.jentis.tracking.sdk.model.interfaces.ResultHandler;
 
@@ -24,14 +23,17 @@ import java.util.Map;
 
 public class JentisTrackService {
     /// The singleton instance of TrackService
-    private JentisTrackService() {};
+    private JentisTrackService() {
+    }
+
+    ;
     private static JentisTrackService INSTANCE = null;
 
     public static JentisTrackService getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new JentisTrackService();
         }
-        return(INSTANCE);
+        return (INSTANCE);
     }
 
     private DebugInformation debugInformation;
@@ -50,7 +52,7 @@ public class JentisTrackService {
 
     private void init() {
         String userId = JentisSharedPrefs.getInstance(context).getUserId();
-        if(userId != null) {
+        if (userId != null) {
             this.userId = userId;
         } else {
             this.userId = JentisUtils.generateRandomUUID();
@@ -63,8 +65,9 @@ public class JentisTrackService {
 
     /**
      * Initializes the Jentis Tracking in the SDK
+     *
      * @param context: application context
-     * @param config: Contains the Configuration to initialize the SDK
+     * @param config:  Contains the Configuration to initialize the SDK
      */
     public void initTracking(Context context, JentisTrackConfig config) {
         this.context = context;
@@ -100,11 +103,11 @@ public class JentisTrackService {
      */
     public Date getLastConsentUpdate() {
         String lastConsent = JentisSharedPrefs.getInstance(context).getLastConsentUpdate();
-        if(lastConsent != null) {
+        if (lastConsent != null) {
             return JentisUtils.stringToDate(lastConsent);
         }
 
-        return  null;
+        return null;
     }
 
     /**
@@ -114,7 +117,7 @@ public class JentisTrackService {
      * Parameter completion: Contains the information whether the request was successful or not
      */
     public void setConsents(HashMap<String, Boolean> consents, ResultHandler<Boolean> handler) {
-        if(config == null){
+        if (config == null) {
             handler.onFailure(new JentisException("[JENTIS] Call initTracking first"));
             log.error("[JENTIS] Call initTracking first");
             return;
@@ -122,17 +125,16 @@ public class JentisTrackService {
 
         Map<String, Boolean> previousConsents = JentisSharedPrefs.getInstance(context).getConsents();
         String consentId = JentisSharedPrefs.getInstance(context).getConsentId();
-        if(consentId == null){
+        if (consentId == null) {
             consentId = JentisUtils.generateRandomUUID();
         }
 
         // Get changed Vendors List
         HashMap<String, Boolean> vendorsChanged = new HashMap<>();
 
-        if(previousConsents != null){
-            for (String previousConsentKey : previousConsents.keySet())
-            {
-                if(previousConsents.get(previousConsentKey) != consents.get(previousConsentKey)) {
+        if (previousConsents != null) {
+            for (String previousConsentKey : previousConsents.keySet()) {
+                if (previousConsents.get(previousConsentKey) != consents.get(previousConsentKey)) {
                     vendorsChanged.put(previousConsentKey, consents.get(previousConsentKey));
                 }
             }
@@ -149,14 +151,14 @@ public class JentisTrackService {
      * Parameter version: (otpional) Set the version when enabling debugging
      */
     public void debugTracking(Boolean shouldDebug, String debugId, String version) {
-        if(config == null){
+        if (config == null) {
             log.error("[JENTIS] Call initTracking first");
             return;
         }
         JentisLogger.disableLogging(!shouldDebug);
 
-        if(shouldDebug ){
-            if(debugId == null || version == null) {
+        if (shouldDebug) {
+            if (debugId == null || version == null) {
                 log.error("[JENTIS] Set debugId & version to debug");
                 return;
             }
@@ -177,48 +179,57 @@ public class JentisTrackService {
      * @param data: Contains the key:value pairs
      */
     public void push(Map<String, Object> data) {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                if(config == null){
-                    log.error("[JENTIS] Call initTracking first");
-                    return;
-                }
+        new PushAsync(data).execute();
+    }
 
-                if(isTrackingDisabled()) {
-                    // User disabled all Tracking options - discard tracking
-                    currentTracks = new ArrayList<String>();
-                    currentProperties = new HashMap<>();
-                    log.error("[JENTIS]: not tracking - all vendors are set to false");
-                    return;
-                }
+    private class PushAsync extends AsyncTask<Void, Void, Void> {
+        private Map<String, Object> data = null;
 
-                String trackString = (String) data.get(Tracking.trackKey);
-                if(trackString == null){
-                    log.error("[JENTIS] track not included");
-                }
-                currentTracks.add(trackString);
+        public PushAsync(Map<String, Object> pushData) {
+            data = new HashMap<>();
+            data.putAll(pushData);
+        }
 
-                for (String entryKey: data.keySet())
-                {
-                    if(entryKey != Tracking.trackKey) {
-                        currentProperties.put(entryKey, data.get(entryKey));
-                    }
-                }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (config == null) {
+                log.error("[JENTIS] Call initTracking first");
+                return null;
+            }
 
+            if (isTrackingDisabled()) {
+                // User disabled all Tracking options - discard tracking
+                currentTracks = new ArrayList<String>();
+                currentProperties = new HashMap<>();
+                log.error("[JENTIS]: not tracking - all vendors are set to false");
+                return null;
+            }
 
-                if (trackString.equalsIgnoreCase(Tracking.TRACK.SUBMIT.toString())) {
-                    submitPush();
+            String trackString = (String) data.get(Tracking.trackKey);
+            if (trackString == null) {
+                log.error("[JENTIS] track not included");
+            }
+            currentTracks.add(trackString);
+
+            for (String entryKey : data.keySet()) {
+                if (entryKey != Tracking.trackKey) {
+                    currentProperties.put(entryKey, data.get(entryKey));
                 }
             }
-        });
+
+
+            if (trackString.equalsIgnoreCase(Tracking.TRACK.SUBMIT.toString())) {
+                submitPush();
+            }
+            return null;
+        }
     }
 
     /**
      * Sends all consent settings to Jentis server
      *
-     * @param consentId: the consentID that needs to be sent
-     * @param vendors: contains the vendors list with their corresponding consent
+     * @param consentId:      the consentID that needs to be sent
+     * @param vendors:        contains the vendors list with their corresponding consent
      * @param vendorsChanged: contains the map of changed vendors with their corresponding consent
      */
     private void sendConsentSettings(String consentId, Map<String, Boolean> vendors, Map<String, Boolean> vendorsChanged, ResultHandler<Boolean> handler) {
@@ -226,7 +237,7 @@ public class JentisTrackService {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                if(!isSessionValid()){
+                if (!isSessionValid()) {
                     sessionId = JentisUtils.generateRandomUUID();
                 }
 
@@ -246,7 +257,7 @@ public class JentisTrackService {
                         JentisSharedPrefs.getInstance(context).setConsents(vendors);
                         JentisSharedPrefs.getInstance(context).setConsentId(consentId);
 
-                        if(isTrackingDisabled()){
+                        if (isTrackingDisabled()) {
                             // User disabled all Tracking options - discard tracking
                             storedTrackings = new ArrayList<JsonObject>();
                             log.info("[JENTIS]: clearing stored trackings - all vendors are set to false");
@@ -256,7 +267,7 @@ public class JentisTrackService {
                         // User set consents - send stored trackings
                         ArrayList<JsonObject> currentlyStoredTrackings = storedTrackings;
 
-                        for (JsonObject storedTracking: currentlyStoredTrackings) {
+                        for (JsonObject storedTracking : currentlyStoredTrackings) {
                             JentisApi.getInstance().submitTracking(storedTracking, null);
                         }
 
@@ -274,8 +285,8 @@ public class JentisTrackService {
         });
     }
 
-    private void submitPush(){
-        if(!isSessionValid()) {
+    private void submitPush() {
+        if (!isSessionValid()) {
             sessionId = JentisUtils.generateRandomUUID();
         }
 
@@ -283,7 +294,7 @@ public class JentisTrackService {
 
         currentTracks = new ArrayList<String>();
 
-        if(eventData == null) {
+        if (eventData == null) {
             log.error("[JENTIS] Error - Failed to get tracking data");
             return;
         }
@@ -291,12 +302,12 @@ public class JentisTrackService {
         JsonObject data = eventData.toJSON();
         JsonArray properties = data.get("data").getAsJsonArray();
 
-        for (JsonElement element: properties) {
-            if(element.getAsJsonObject().get("documentType").getAsString().equalsIgnoreCase(DocumentType.EVENT.toString())) {
+        for (JsonElement element : properties) {
+            if (element.getAsJsonObject().get("documentType").getAsString().equalsIgnoreCase(DocumentType.EVENT.toString())) {
                 JsonObject prop = element.getAsJsonObject().get("property").getAsJsonObject();
 
-                if(currentProperties != null){
-                    for (String entryKey: currentProperties.keySet()) {
+                if (currentProperties != null) {
+                    for (String entryKey : currentProperties.keySet()) {
 
                         if (currentProperties.get(entryKey) instanceof String) {
                             prop.addProperty(entryKey, (String) currentProperties.get(entryKey));
@@ -310,7 +321,7 @@ public class JentisTrackService {
             }
         }
 
-        if(isTrackingDisabled() || consents.keySet().size() == 0) {
+        if (isTrackingDisabled() || consents.keySet().size() == 0) {
             storedTrackings.add(data);
         } else {
 
@@ -339,7 +350,7 @@ public class JentisTrackService {
         // Check if the session is not longer valid then the specified session duration
         Long diff = new Date().getTime() - sessionCreatedAt.getTime();
         Long minutes = diff / (1000 * 60);
-        if(minutes < Tracking.sessionDuration) {
+        if (minutes < Tracking.sessionDuration) {
             return true;
         } else {
             return false;
@@ -347,15 +358,14 @@ public class JentisTrackService {
     }
 
     private Boolean isTrackingDisabled() {
-        if(consents == null || consents.keySet().size() == 0) {
+        if (consents == null || consents.keySet().size() == 0) {
             return false;
         }
 
         boolean allConsentsDisabled = true;
 
-        for (String consentKey: consents.keySet())
-        {
-            if(consents.get(consentKey) != false) {
+        for (String consentKey : consents.keySet()) {
+            if (consents.get(consentKey) != false) {
                 allConsentsDisabled = false;
                 break;
             }

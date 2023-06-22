@@ -9,7 +9,8 @@ public class System {
     String environment, navigatorUserAgent, href;
     Map<String, Boolean> consent;
 
-    public System() {}
+    public System() {
+    }
 
     public System(String environment, String navigatorUserAgent, String href, Map<String, Boolean> consent) {
         setEnvironment(environment);
@@ -19,11 +20,14 @@ public class System {
     }
 
     public JsonObject toJSON() {
-        JsonObject jsonObject= new JsonObject();
-        jsonObject.addProperty("environment", getEnvironment());
-        jsonObject.addProperty("navigator-userAgent", getNavigatorUserAgent());
-        jsonObject.addProperty("href", getHref());
-        if(getConsent() != null){
+        JsonObject jsonObject = new JsonObject();
+        if (getEnvironment() != null)
+            jsonObject.addProperty("environment", getEnvironment());
+        if (getNavigatorUserAgent() != null)
+            jsonObject.addProperty("navigator-userAgent", getNavigatorUserAgent());
+        if (getHref() != null)
+            jsonObject.addProperty("href", getHref());
+        if (getConsent() != null) {
             jsonObject.add("consent", JentisUtils.hashMapToJsonObjectBoolean(getConsent()));
         }
 

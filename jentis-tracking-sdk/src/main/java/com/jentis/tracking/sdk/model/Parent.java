@@ -6,7 +6,8 @@ public class Parent {
     String user;
     String session;
 
-    public Parent(){}
+    public Parent() {
+    }
 
     public Parent(String user, String session) {
         this.user = user;
@@ -30,9 +31,11 @@ public class Parent {
     }
 
     public JsonObject toJSON() {
-        JsonObject jsonObject= new JsonObject();
-        jsonObject.addProperty("user", getUser());
-        jsonObject.addProperty("session", getSession());
+        JsonObject jsonObject = new JsonObject();
+        if (getUser() != null)
+            jsonObject.addProperty("user", getUser());
+        if (getSession() != null)
+            jsonObject.addProperty("session", getSession());
 
         return jsonObject;
     }

@@ -11,10 +11,11 @@ public class TrackingDataDatum {
     Property property = new Property();
     System system = null;
     Aggr aggr = new Aggr();
-    Parent parent  = new Parent();
+    Parent parent = new Parent();
     String pluginid = null;
 
-    public TrackingDataDatum() {}
+    public TrackingDataDatum() {
+    }
 
     public TrackingDataDatum(String id, String action, String account, String documentType, Property property, System system, Aggr aggr, Parent parent, String pluginid) {
         this.id = id;
@@ -101,26 +102,27 @@ public class TrackingDataDatum {
     }
 
     public JsonObject toJSON() {
-        JsonObject jsonObject= new JsonObject();
+        JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("_id", getId());
         jsonObject.addProperty("action", getAction());
         jsonObject.addProperty("account", getAccount());
         jsonObject.addProperty("documentType", getDocumentType());
-        if(getProperty()  != null) {
+        if (getProperty() != null) {
             jsonObject.add("property", getProperty().toJSON());
         }
 
-        if(getSystem()  != null) {
+        if (getSystem() != null) {
             jsonObject.add("system", getSystem().toJSON());
         }
 
-        if(getAggr()  != null) {
+        if (getAggr() != null) {
             jsonObject.add("aggr", getAggr().toJSON());
         }
-        if(getParent()  != null) {
+        if (getParent() != null) {
             jsonObject.add("parent", getParent().toJSON());
         }
-        jsonObject.addProperty("pluginid", getPluginid());
+        if (getPluginid() != null)
+            jsonObject.addProperty("pluginid", getPluginid());
 
         return jsonObject;
     }

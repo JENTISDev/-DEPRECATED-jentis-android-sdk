@@ -285,39 +285,64 @@ public class Property {
     }
 
     public JsonObject toJSON() {
-        JsonObject jsonObject= new JsonObject();
-        jsonObject.addProperty("app_device_model", getAppDeviceModel());
-        jsonObject.addProperty("app_device_brand", getAppDeviceBrand());
-        jsonObject.addProperty("app_device_os", getAppDeviceOS());
-        jsonObject.addProperty("app_device_os_version", getAppDeviceOSVersion());
-        jsonObject.addProperty("app_device_language", getAppDeviceLanguage());
-        jsonObject.addProperty("app_device_region", getAppDeviceRegion());
-        jsonObject.addProperty("app_device_width", getAppDeviceWidth());
-        jsonObject.addProperty("app_device_height", getAppDeviceHeight());
-        jsonObject.addProperty("app_application_name", getAppApplicationName());
-        jsonObject.addProperty("app_application_version", getAppApplicationVersion());
-        jsonObject.addProperty("app_application_build_number", getAppApplicationBuildNumber());
-        jsonObject.addProperty("jts_debug", getJtsDebug());
-        jsonObject.addProperty("jts_version", getJtsVersion());
-        if(jtspushedcommands != null) {
+        JsonObject jsonObject = new JsonObject();
+        if (getAppDeviceModel() != null)
+            jsonObject.addProperty("app_device_model", getAppDeviceModel());
+        if (getAppDeviceBrand() != null)
+            jsonObject.addProperty("app_device_brand", getAppDeviceBrand());
+        if (getAppDeviceOS() != null)
+            jsonObject.addProperty("app_device_os", getAppDeviceOS());
+        if (getAppDeviceOSVersion() != null)
+            jsonObject.addProperty("app_device_os_version", getAppDeviceOSVersion());
+        if (getAppDeviceLanguage() != null)
+            jsonObject.addProperty("app_device_language", getAppDeviceLanguage());
+        if (getAppDeviceRegion() != null)
+            jsonObject.addProperty("app_device_region", getAppDeviceRegion());
+        if (getAppDeviceWidth() != null)
+            jsonObject.addProperty("app_device_width", getAppDeviceWidth());
+        if (getAppDeviceHeight() != null)
+            jsonObject.addProperty("app_device_height", getAppDeviceHeight());
+        if (getAppApplicationName() != null)
+            jsonObject.addProperty("app_application_name", getAppApplicationName());
+        if (getAppApplicationVersion() != null)
+            jsonObject.addProperty("app_application_version", getAppApplicationVersion());
+        if (getAppApplicationBuildNumber() != null)
+            jsonObject.addProperty("app_application_build_number", getAppApplicationBuildNumber());
+        if (getJtsDebug() != null)
+            jsonObject.addProperty("jts_debug", getJtsDebug());
+        if (getJtsVersion() != null)
+            jsonObject.addProperty("jts_version", getJtsVersion());
+        if (jtspushedcommands != null) {
             jsonObject.add("jtspushedcommands", JentisUtils.arrayToJsonArray(jtspushedcommands));
         }
-        jsonObject.addProperty("document_ref", getDocumentRef());
-        jsonObject.addProperty("document_title", getDocumentTitle());
-        jsonObject.addProperty("window_location_href", getWindowLocationHref());
-        jsonObject.addProperty("date_now", getDateNow());
-        jsonObject.addProperty("user_doc_id", getUserDocID());
-        jsonObject.addProperty("event_doc_id", getEventDocID());
-        jsonObject.addProperty("document_location_href", getDocumentLocationHref());
-        jsonObject.addProperty("track", getTrack());
-        jsonObject.addProperty("consentid", getConsentid());
-        jsonObject.addProperty("lastupdate", getLastupdate());
-        if(getVendors() != null) {
+        if (getDocumentRef() != null)
+            jsonObject.addProperty("document_ref", getDocumentRef());
+        if (getDocumentTitle() != null)
+            jsonObject.addProperty("document_title", getDocumentTitle());
+        if (getWindowLocationHref() != null)
+            jsonObject.addProperty("window_location_href", getWindowLocationHref());
+        if (getDateNow() != null)
+            jsonObject.addProperty("date_now", getDateNow());
+        if (getUserDocID() != null)
+            jsonObject.addProperty("user_doc_id", getUserDocID());
+        if (getEventDocID() != null)
+            jsonObject.addProperty("event_doc_id", getEventDocID());
+        if (getDocumentLocationHref() != null)
+            jsonObject.addProperty("document_location_href", getDocumentLocationHref());
+        if (getTrack() != null)
+            jsonObject.addProperty("track", getTrack());
+        if (getConsentid() != null)
+            jsonObject.addProperty("consentid", getConsentid());
+        if (getLastupdate() != null)
+            jsonObject.addProperty("lastupdate", getLastupdate());
+        if (getVendors() != null) {
             jsonObject.add("vendors", JentisUtils.hashMapToJsonObjectBoolean(getVendors()));
         }
-        jsonObject.addProperty("send", getSend());
-        jsonObject.addProperty("userconsent", getUserconsent());
-        if(getVendorsChanged() != null) {
+        if (getSend() != null)
+            jsonObject.addProperty("send", getSend());
+        if (getUserconsent() != null)
+            jsonObject.addProperty("userconsent", getUserconsent());
+        if (getVendorsChanged() != null) {
             jsonObject.add("vendorsChanged", JentisUtils.hashMapToJsonObjectBoolean(getVendorsChanged()));
         }
 

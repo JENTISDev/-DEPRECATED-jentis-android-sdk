@@ -14,7 +14,8 @@ public class Cmd {
         return data;
     }
 
-    public Cmd() {}
+    public Cmd() {
+    }
 
     public Cmd(String key, CmdDatum[] data) {
         this.key = key;
@@ -22,9 +23,10 @@ public class Cmd {
     }
 
     public JsonObject toJSON() {
-        JsonObject jsonObject= new JsonObject();
-        jsonObject.addProperty("key", getKey());
-        if(data != null) {
+        JsonObject jsonObject = new JsonObject();
+        if (getKey() != null)
+            jsonObject.addProperty("key", getKey());
+        if (data != null) {
             jsonObject.addProperty("data", data.toString());
         }
 
