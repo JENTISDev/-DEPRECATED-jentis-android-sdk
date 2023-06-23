@@ -1,5 +1,7 @@
 package com.jentis.tracking.sdk.model;
 
+import android.util.Log;
+
 import com.google.gson.JsonObject;
 import com.jentis.tracking.sdk.JentisUtils;
 
@@ -284,7 +286,7 @@ public class Property {
         this.vendorsChanged = vendorsChanged;
     }
 
-    public JsonObject toJSON() {
+    public JsonObject toJSON(int productCount, Map<String, ArrayList<Object>> product) {
         JsonObject jsonObject = new JsonObject();
         if (getAppDeviceModel() != null)
             jsonObject.addProperty("app_device_model", getAppDeviceModel());
@@ -344,6 +346,13 @@ public class Property {
             jsonObject.addProperty("userconsent", getUserconsent());
         if (getVendorsChanged() != null) {
             jsonObject.add("vendorsChanged", JentisUtils.hashMapToJsonObjectBoolean(getVendorsChanged()));
+        }
+
+        if (productCount > 0) {
+            for (String productKey : product.keySet()) {
+                ArrayList<Object> value = product.get(productKey);
+                jsonObject.add(productKey, JentisUtils.objectArrayToJsonArray(value));
+            }
         }
 
         return jsonObject;

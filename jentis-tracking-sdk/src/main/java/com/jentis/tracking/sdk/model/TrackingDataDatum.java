@@ -1,5 +1,7 @@
 package com.jentis.tracking.sdk.model;
 
+import android.util.Log;
+
 import com.google.gson.JsonObject;
 import com.jentis.tracking.sdk.JentisUtils;
 
@@ -134,7 +136,7 @@ public class TrackingDataDatum {
         jsonObject.addProperty("account", getAccount());
         jsonObject.addProperty("documentType", getDocumentType());
         if (getProperty() != null) {
-            jsonObject.add("property", getProperty().toJSON());
+            jsonObject.add("property", getProperty().toJSON(getProductCount(), getProduct()));
         }
 
         if (getSystem() != null) {
@@ -150,12 +152,6 @@ public class TrackingDataDatum {
         if (getPluginid() != null)
             jsonObject.addProperty("pluginid", getPluginid());
 
-        if (getProductCount() > 0) {
-            for (String productKey : getProduct().keySet()) {
-                ArrayList<Object> value = getProduct().get(productKey);
-                jsonObject.add(productKey, JentisUtils.objectArrayToJsonArray(value));
-            }
-        }
         return jsonObject;
     }
 }

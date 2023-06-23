@@ -33,7 +33,7 @@ class JentisTrackServiceUtils {
     public static TrackingDataDatum getUserData(Parent parent, JentisTrackConfig config) {
         TrackingDataDatum userData = new TrackingDataDatum();
         userData.setId(parent.getUser());
-        userData.setAction(JentisConfig.ACTION.UDP.toString());
+        userData.setAction(JentisConfig.ACTION.UPD.toString());
         userData.setDocumentType(JentisConfig.DOC_TYPE.USER.toString());
 
         System userDataSystem = new System();
@@ -110,7 +110,7 @@ class JentisTrackServiceUtils {
         TrackingDataDatum sessionData = new TrackingDataDatum();
 
         sessionData.setId(parent.getSession());
-        sessionData.setAction(JentisConfig.ACTION.UDP.toString());
+        sessionData.setAction(JentisConfig.ACTION.UPD.toString());
         sessionData.setAccount(getAccount(config));
         sessionData.setDocumentType(JentisConfig.DOC_TYPE.SESSION.toString());
 

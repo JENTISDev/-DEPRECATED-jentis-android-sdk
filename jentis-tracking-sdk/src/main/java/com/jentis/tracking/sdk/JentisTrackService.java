@@ -243,7 +243,7 @@ public class JentisTrackService {
             currentTracks.add(trackString);
 
             for (String entryKey : data.keySet()) {
-                if (entryKey != Tracking.trackKey) {
+                if (entryKey != Tracking.trackKey && !entryKey.equalsIgnoreCase( Tracking.TRACK.PRODUCT.toString())) {
                     currentProperties.put(entryKey, data.get(entryKey));
                 }
             }
@@ -340,6 +340,10 @@ public class JentisTrackService {
                 if (currentProperties != null) {
                     for (String entryKey : currentProperties.keySet()) {
 
+                        if (prop.get(entryKey) != null) {
+                            // element is already in the tracking data - do not overwrite
+                            continue;
+                        }
                         if (currentProperties.get(entryKey) instanceof String) {
                             prop.addProperty(entryKey, (String) currentProperties.get(entryKey));
                         } else if (currentProperties.get(entryKey) instanceof ArrayList) {
@@ -363,6 +367,8 @@ public class JentisTrackService {
                 @Override
                 public void onSuccess(Boolean success) {
                     log.info("[JENTIS] - Push data successful");
+                    productDictionary.clear();
+                    productCounter = 0;
                 }
 
                 @Override

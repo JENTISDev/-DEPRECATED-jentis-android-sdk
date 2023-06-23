@@ -1,5 +1,7 @@
 package com.jentis.tracking.sdk.model;
 
+import android.util.Log;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -59,7 +61,6 @@ public class JentisData {
                 dataArray.add(trackData.toJSON());
             }
         }
-
         if(client != null) {
             jsonObject.add("client", client.toJSON());
         }

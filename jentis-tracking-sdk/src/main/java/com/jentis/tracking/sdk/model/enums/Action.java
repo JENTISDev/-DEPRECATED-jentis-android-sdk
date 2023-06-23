@@ -1,7 +1,7 @@
 package com.jentis.tracking.sdk.model.enums;
 
 public enum Action {
-    UDP("udp", 0),
+    UPD("upd", 0),
     NEW("new", 1);
 
     private String stringValue;
