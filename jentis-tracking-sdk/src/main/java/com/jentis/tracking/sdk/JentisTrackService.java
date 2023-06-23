@@ -19,6 +19,7 @@ import com.jentis.tracking.sdk.model.interfaces.ResultHandler;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JentisTrackService {
@@ -26,7 +27,6 @@ public class JentisTrackService {
     private JentisTrackService() {
     }
 
-    ;
     private static JentisTrackService INSTANCE = null;
 
     public static JentisTrackService getInstance() {
@@ -47,6 +47,8 @@ public class JentisTrackService {
     private JentisTrackConfig config;
     private static final JentisLogger log = JentisLogger.getLogger("TrackService");
 
+    private HashMap<String, ArrayList<Object>> productDictionary = new HashMap<>();
+    private int productCounter = 0;
 
     private ArrayList<JsonObject> storedTrackings = new ArrayList<JsonObject>();
 
@@ -209,6 +211,35 @@ public class JentisTrackService {
             if (trackString == null) {
                 log.error("[JENTIS] track not included");
             }
+
+            if (trackString.equalsIgnoreCase(Tracking.TRACK.PRODUCT.toString())) {
+                for (Map.Entry<String, Object> entry : data.entrySet()) {
+                    if (!entry.getKey().equals(Tracking.trackKey)) {
+                        if (productDictionary.containsKey(entry.getKey())) {
+                            productDictionary.get(entry.getKey()).add(entry.getValue());
+                        } else {
+                            productDictionary.put(entry.getKey(), new ArrayList());
+                            for (int i = 0; i <= productCounter; i++) {
+                                if (i == productCounter) {
+                                    break;
+                                }
+                                productDictionary.get(entry.getKey()).add("");
+                            }
+                            productDictionary.get(entry.getKey()).add(entry.getValue());
+                        }
+                    }
+                }
+                productCounter++;
+                for (Map.Entry<String, ArrayList<Object>> entry : productDictionary.entrySet()) {
+                    String key = entry.getKey();
+                    List<Object> value = entry.getValue();
+                    if (value.size() < productCounter) {
+                        for (int i = value.size(); i < productCounter; i++) {
+                            value.add("");
+                        }
+                    }
+                }
+            }
             currentTracks.add(trackString);
 
             for (String entryKey : data.keySet()) {
@@ -290,7 +321,7 @@ public class JentisTrackService {
             sessionId = JentisUtils.generateRandomUUID();
         }
 
-        JentisData eventData = JentisTrackServiceUtils.getTrackingData(getClient(), userId, sessionId, config, debugInformation, consents, currentTracks, context);
+        JentisData eventData = JentisTrackServiceUtils.getTrackingData(getClient(), userId, sessionId, config, debugInformation, consents, currentTracks, context, productDictionary, productCounter);
 
         currentTracks = new ArrayList<String>();
 

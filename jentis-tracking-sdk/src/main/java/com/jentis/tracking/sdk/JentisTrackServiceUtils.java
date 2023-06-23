@@ -17,6 +17,7 @@ import com.jentis.tracking.sdk.model.Tracking;
 import com.jentis.tracking.sdk.model.TrackingDataDatum;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -24,9 +25,9 @@ class JentisTrackServiceUtils {
 
     /**
      * Generates the userData that will be sent to the server side
+     *
      * @param parent: contains the user id that will be used to generate user data
      * @param config: used to retrieve the account info
-     *
      * @return userData as TrackingDataDatum object
      */
     public static TrackingDataDatum getUserData(Parent parent, JentisTrackConfig config) {
@@ -46,6 +47,7 @@ class JentisTrackServiceUtils {
 
     /**
      * Generates the consentData that will be sent to the server side
+     *
      * @return consentData as TrackingDataDatum object
      */
     public static TrackingDataDatum getConsentData(Parent parent, String consentId, Map<String, Boolean> vendors, Map<String, Boolean> vendorsChanged, JentisTrackConfig config, Context context) {
@@ -80,9 +82,10 @@ class JentisTrackServiceUtils {
 
     /**
      * Generates the JentisData that will be sent to the server side
+     *
      * @return consentData as TrackingDataDatum object
      */
-    public static JentisData getTrackingData(Client client, String userId, String sessionId, JentisTrackConfig config, DebugInformation debugInfo, Map<String, Boolean> consents, ArrayList<String> currentTracks, Context context) {
+    public static JentisData getTrackingData(Client client, String userId, String sessionId, JentisTrackConfig config, DebugInformation debugInfo, Map<String, Boolean> consents, ArrayList<String> currentTracks, Context context, HashMap<String, ArrayList<Object>> productDictionary, int productCounter) {
         JentisData trackingData = new JentisData();
         Parent parent = new Parent(userId, sessionId);
 
@@ -91,7 +94,7 @@ class JentisTrackServiceUtils {
         ArrayList<TrackingDataDatum> data = new ArrayList<>();
         data.add(getUserData(parent, config));
         data.add(getSessionData(parent, debugInfo, config));
-        data.add(getEventData(parent, config, consents, currentTracks, userId, context));
+        data.add(getEventData(parent, config, consents, currentTracks, userId, context, productDictionary, productCounter));
 
         trackingData.setData(data);
 
@@ -100,6 +103,7 @@ class JentisTrackServiceUtils {
 
     /**
      * Generates the TrackingDataDatum that will be sent to the server side
+     *
      * @return sessionData as TrackingDataDatum object
      */
     private static TrackingDataDatum getSessionData(Parent parent, DebugInformation debugInfo, JentisTrackConfig config) {
@@ -112,7 +116,7 @@ class JentisTrackServiceUtils {
 
         Property sessionDataProperty = new Property();
 
-        if(debugInfo != null && debugInfo.getDebugEnabled()) {
+        if (debugInfo != null && debugInfo.getDebugEnabled()) {
             sessionDataProperty.setJtsDebug(debugInfo.getDebugId());
             sessionDataProperty.setJtsVersion(debugInfo.getVersion());
         }
@@ -127,14 +131,18 @@ class JentisTrackServiceUtils {
 
     /**
      * Generates the TrackingDataDatum that will be sent to the server side
+     *
      * @return event data as TrackingDataDatum object
      */
-    public static TrackingDataDatum getEventData(Parent parent, JentisTrackConfig config, Map<String, Boolean> consents, ArrayList<String> currentTracks, String userId, Context context) {
+    public static TrackingDataDatum getEventData(Parent parent, JentisTrackConfig config, Map<String, Boolean> consents, ArrayList<String> currentTracks, String userId, Context context, HashMap<String, ArrayList<Object>> productDictionary, int productCounter) {
         TrackingDataDatum eventData = new TrackingDataDatum();
         String eventId = JentisUtils.generateRandomUUID();
         eventData.setId(eventId);
         eventData.setDocumentType(JentisConfig.DOC_TYPE.EVENT.toString());
         eventData.setAction(JentisConfig.ACTION.NEW.toString());
+
+        eventData.setProduct(productDictionary);
+        eventData.setProductCount(productCounter);
 
         eventData.setParent(parent);
         eventData.setPluginid(Tracking.pluginId);
@@ -191,10 +199,11 @@ class JentisTrackServiceUtils {
 
     /**
      * Generates the TrackingDataDatum that will be sent to the server side
+     *
      * @return empty string if no config file or a String containing trackId and environment
      */
     private static String getAccount(JentisTrackConfig config) {
-        if(config == null){
+        if (config == null) {
             return "";
         }
 

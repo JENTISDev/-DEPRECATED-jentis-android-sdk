@@ -1,5 +1,7 @@
 package com.jentis.tracking.sdk;
 
+import android.util.Log;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jentis.tracking.sdk.model.Tracking;
@@ -18,7 +20,7 @@ public class JentisUtils {
         SecureRandom rnd = new SecureRandom();
 
         StringBuilder sb = new StringBuilder(Tracking.idLength);
-        for(int i = 0; i < Tracking.idLength; i++)
+        for (int i = 0; i < Tracking.idLength; i++)
             sb.append(AB.charAt(rnd.nextInt(AB.length())));
         return sb.toString();
     }
@@ -28,11 +30,11 @@ public class JentisUtils {
      * Returns the string if it doesn't contain or the string without prefix if it contains
      */
     public static String deletingPrefix(String word, String prefix) {
-        if(!word.startsWith(prefix)) {
-            return  word;
+        if (!word.startsWith(prefix)) {
+            return word;
         }
 
-        return  word.substring(prefix.length());
+        return word.substring(prefix.length());
     }
 
     /**
@@ -55,7 +57,7 @@ public class JentisUtils {
      * Transforms a String into a Date
      * Returns: a Date from the specified String
      */
-    public static Date stringToDate(String dateString){
+    public static Date stringToDate(String dateString) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
         try {
             Date date = format.parse(dateString);
@@ -71,7 +73,7 @@ public class JentisUtils {
      * Transforms a Date into a String
      * Returns: a string from the specified date
      */
-    public static String dateToString(Date date){
+    public static String dateToString(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
         String dateString = dateFormat.format(date);
         return dateString;
@@ -83,8 +85,25 @@ public class JentisUtils {
      */
     public static JsonArray arrayToJsonArray(ArrayList<String> data) {
         JsonArray array = new JsonArray();
-        for (String value: data) {
+        for (String value : data) {
             array.add(value);
+        }
+
+        return array;
+    }
+
+    public static JsonArray objectArrayToJsonArray(ArrayList<Object> data) {
+        JsonArray array = new JsonArray();
+        for (Object value : data) {
+            if (value instanceof String) {
+                array.add(value.toString());
+            } else if (value instanceof Integer) {
+                array.add(Integer.parseInt(value.toString()));
+            } else if (value instanceof Double) {
+                array.add(Double.parseDouble(value.toString()));
+            } else {
+                Log.e("JentisUtils", "arrayToJsonArray: Unknown type" + value.getClass());
+            }
         }
 
         return array;
@@ -92,14 +111,14 @@ public class JentisUtils {
 
     /**
      * Transforms a Hashmap into a JsonObject
+     *
      * @param data : the hashmap that needs to be transformed into JsonObject
      * @return : the newly created JsonObject
      */
     public static JsonObject hashMapToJsonObjectBoolean(Map<String, Boolean> data) {
         JsonObject obj = new JsonObject();
 
-        for (String entryKey: data.keySet())
-        {
+        for (String entryKey : data.keySet()) {
             obj.addProperty(entryKey, data.get(entryKey));
         }
 
@@ -108,14 +127,14 @@ public class JentisUtils {
 
     /**
      * Transforms a Hashmap into a JsonObject
+     *
      * @param data : the hashmap that needs to be transformed into JsonObject
      * @return : the newly created JsonObject
      */
     public static JsonObject hashMapToJsonObjectString(Map<String, String> data) {
         JsonObject obj = new JsonObject();
 
-        for (String entryKey: data.keySet())
-        {
+        for (String entryKey : data.keySet()) {
             obj.addProperty(entryKey, data.get(entryKey));
         }
 

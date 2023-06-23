@@ -44,8 +44,8 @@ public class ProductSampleActivity extends AppCompatActivity {
         JentisTrackService.getInstance().push(data);
 
         data.clear();
-        data.put("track", "productview");
-        data.put("type", "order");
+        data.put("track", "product");
+        data.put("type", "productview");
         data.put("id", 9_999_999);
         data.put("name", "APP DEVELOPMENT");
         data.put("color", "blue");

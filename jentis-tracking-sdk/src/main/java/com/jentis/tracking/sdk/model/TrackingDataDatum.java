@@ -1,6 +1,12 @@
 package com.jentis.tracking.sdk.model;
 
 import com.google.gson.JsonObject;
+import com.jentis.tracking.sdk.JentisUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TrackingDataDatum {
 
@@ -13,6 +19,9 @@ public class TrackingDataDatum {
     Aggr aggr = new Aggr();
     Parent parent = new Parent();
     String pluginid = null;
+
+    Map<String, ArrayList<Object>> product = new HashMap<>();
+    int productCount;
 
     public TrackingDataDatum() {
     }
@@ -28,6 +37,7 @@ public class TrackingDataDatum {
         this.parent = parent; //?? Parent()
         this.pluginid = pluginid;
     }
+
 
     public String getId() {
         return id;
@@ -101,6 +111,22 @@ public class TrackingDataDatum {
         this.pluginid = pluginid;
     }
 
+    public void setProduct(Map<String, ArrayList<Object>> product) {
+        this.product = product;
+    }
+
+    public void setProductCount(int productCount) {
+        this.productCount = productCount;
+    }
+
+    public int getProductCount() {
+        return productCount;
+    }
+
+    public Map<String, ArrayList<Object>> getProduct() {
+        return product;
+    }
+
     public JsonObject toJSON() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("_id", getId());
@@ -124,6 +150,12 @@ public class TrackingDataDatum {
         if (getPluginid() != null)
             jsonObject.addProperty("pluginid", getPluginid());
 
+        if (getProductCount() > 0) {
+            for (String productKey : getProduct().keySet()) {
+                ArrayList<Object> value = getProduct().get(productKey);
+                jsonObject.add(productKey, JentisUtils.objectArrayToJsonArray(value));
+            }
+        }
         return jsonObject;
     }
 }
