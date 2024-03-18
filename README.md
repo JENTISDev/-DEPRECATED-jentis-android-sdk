@@ -8,7 +8,7 @@ In order to integrate with Jentis SDK you will have to add the following line in
 
 ```java
 
-implementation 'com.jentis:jentis-tracking-sdk:1.0.1'
+implementation 'com.jentis:jentis-tracking-sdk:1.0.2'
 
 repositories {
         mavenCentral()
